@@ -10,11 +10,11 @@ export const metadata = {
     description:
       "Discover unique handcrafted items from artisans around the world. Shop pottery, furniture, jewelry, and more at Handcrafted Haven, and support small businesses with every purchase.",
     type: "website",
-    url: "https://your-domain.com",
+    url: "https://handcrafted-heaven.vercel.app/",
     site_name: "Handcrafted Haven",
     images: [
       {
-        url: "https://your-domain.com/path-to-image.jpg",
+        url: "https://github.com/Koigor97/handcrafted-heaven/blob/main/public/og-website-image.png",
         width: 1200,
         height: 630,
         alt: "Handcrafted Haven Marketplace",
@@ -24,14 +24,18 @@ export const metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    site: "@yourtwitterhandle", // Replace with your Twitter handle
+    site: "@twitterhandle", // Replace with your Twitter handle
     title: "Handcrafted Haven - Unique Handmade Products",
     description:
       "Explore a curated selection of handmade treasures from artisans. Support craftsmanship with every purchase.",
     images: [
       {
-        url: "https://your-domain.com/path-to-image.jpg",
-        alt: "Handcrafted Haven Website page",
+        url: "https://github.com/Koigor97/handcrafted-heaven/blob/main/public/handcrafted-haven-logo.png",
+        alt: "Handcrafted Haven logo",
+      },
+      {
+        url: "https://github.com/Koigor97/handcrafted-heaven/blob/main/public/og-website-image.png",
+        alt: "Handcrafted Haven Marketplace",
       },
     ],
   },
