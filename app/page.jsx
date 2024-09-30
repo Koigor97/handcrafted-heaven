@@ -1,4 +1,9 @@
-export default function Home() {
+import { getAllProducts, getProductById } from "@/services/productService";
+
+export default async function Home() {
+  const products = await getProductById("e41bc845-8e19-403d-96eb-f9aa691df447");
+  console.log(products);
+
   return (
     <div>
       <h1>Welcome to Handcrafted Haven</h1>
