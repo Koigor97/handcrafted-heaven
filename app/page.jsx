@@ -1,10 +1,13 @@
 // import { getAllProducts, getProductById } from "@/services/productService";
+import HeaderMenu from '@/components/layout/HeaderMenu';
 
 export default async function Home() {
   // const products = await getProductById("e41bc845-8e19-403d-96eb-f9aa691df447");
   // console.log(products);
 
   return (
+    <>
+    <HeaderMenu/>
     <div>
       <h1>Welcome to Handcrafted Haven</h1>
       <p>
@@ -15,5 +18,6 @@ export default async function Home() {
         and support small businesses dedicated to craftsmanship and creativity.
       </p>
     </div>
+    </>
   );
 }
