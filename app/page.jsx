@@ -1,4 +1,6 @@
 // import { getAllProducts, getProductById } from "@/services/productService";
+import HeroMain from '@/components/layout/HeroMain';
+import BannerArrivals from '@/components/layout/BannerArrivals';
 import HeaderMenu from '@/components/layout/HeaderMenu';
 
 export default async function Home() {
@@ -18,6 +20,8 @@ export default async function Home() {
         and support small businesses dedicated to craftsmanship and creativity.
       </p>
     </div>
+    <HeroMain />
+    <BannerArrivals />
     </>
   );
 }
