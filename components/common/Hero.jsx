@@ -21,7 +21,7 @@ export default function Hero({
     <section className={classNameSection}>
         <div className={classNameMessage}>
             <h2 className={`${eb_Garamond.className} text-2xl font-bold`}>{title}</h2>
-            <p className='my-3'>{description}</p>
+            <p className='my-4'>{description}</p>
             <Button asChild size="sm" className={classNameBtn}>
                 <Link href={pageLink} className='text-sm md:text-base'>
                     {btnAction}

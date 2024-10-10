@@ -19,7 +19,7 @@ export default function HeroMain() {
     return (
         <>
             <Hero
-            classNameSection="flex flex-col bg-secondary1-800 text-text-50 p-8 items-center sm:flex-row sm:justify-center md:p-16 md:gap-10"
+            classNameSection="flex flex-col bg-secondary1-800 text-text-50 p-8 items-center gap-5 sm:flex-row sm:justify-center md:p-16 md:gap-10"
             classNameMessage="w-full"
             classNameImage="flex items-center w-full "
             title="Nordic Oak TV Stand"
