@@ -1,8 +1,13 @@
-import Banner from "@/components/layout/Banner";
+// import Banner from "@/components/layout/Banner";
 
 import { nunito } from "./font";
 import "./globals.css";
 import Footer from "@/components/layout/Footer";
+import Brand from "@/components/common/Brand";
+import NavLinks from "@/components/common/NavLinks";
+import { Button } from "@/components/ui/button";
+import Header from "@/components/layout/Header";
+
 
 export const metadata = {
   title: "Handcrafted Haven - A place to find unique handcrafted items",
@@ -63,9 +68,11 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={nunito.className}>
-        <header>
-          <Banner />
+        <header className="bg-primary">
+          <Header />
         </header>
+        
+
 
         <main>{children}</main>
 

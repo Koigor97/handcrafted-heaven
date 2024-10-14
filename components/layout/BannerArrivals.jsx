@@ -19,7 +19,7 @@ export default function BannerArrivals() {
 
     return (
         <Hero
-        classNameSection="flex flex-col my-4 items-center sm:flex-row sm:justify-center"
+        classNameSection="flex flex-col my-4 items-center gap-5 sm:flex-row sm:justify-center sm:gap-0"
         classNameMessage="w-full px-8 md:px-16"
         classNameImage="flex justify-center items-center w-full sm:bg-primary"
         title="Discover Our Latest Arrivals"
