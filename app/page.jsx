@@ -1,6 +1,7 @@
 // import { getAllProducts, getProductById } from "@/services/productService";
 import HeroMain from '@/components/layout/HeroMain';
 import BannerArrivals from '@/components/layout/BannerArrivals';
+import ArtisansSection from '@/components/layout/ArtistSection';
 import HeaderMenu from '@/components/layout/HeaderMenu';
 
 export default async function Home() {
@@ -12,6 +13,7 @@ export default async function Home() {
     <HeaderMenu/>
     <HeroMain />
     <BannerArrivals />
+    <ArtisansSection />
     </>
   );
 }
