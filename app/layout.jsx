@@ -3,9 +3,9 @@
 import { nunito } from "./font";
 import "./globals.css";
 import Footer from "@/components/layout/Footer";
-import Brand from "@/components/common/Brand";
-import NavLinks from "@/components/common/NavLinks";
-import { Button } from "@/components/ui/button";
+// import Brand from "@/components/common/Brand";
+// import NavLinks from "@/components/common/NavLinks";
+// import { Button } from "@/components/ui/button";
 import Header from "@/components/layout/Header";
 
 
