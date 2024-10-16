@@ -3,7 +3,7 @@ import db from '../../lib/db';
 export default async function ArtisansSection() {
   const artisans = await getAllArtisans();
 
-  console.log('artisans', artisans);
+  // console.log('artisans', artisans);
 
   return (
     <section className="text-center py-12">
