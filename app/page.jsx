@@ -8,7 +8,7 @@ import { getAllProducts } from '@/services/productService';
 
 
 
-export default async function Home() {
+export default async function Home({searchParams}) {
   // const products = await getProductById("e41bc845-8e19-403d-96eb-f9aa691df447");
   // console.log(products);
   const products = await getAllProducts();
@@ -16,7 +16,7 @@ export default async function Home() {
 
   return (
     <>
-    <HeaderMenu/>
+    <HeaderMenu searchParams={searchParams}/>
     <HeroMain />
     <BannerArrivals />
     <div className="my-8">
