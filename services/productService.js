@@ -214,3 +214,54 @@ export async function getFilteredProducts(searchQuery) {
     throw error;
   }
 }
+
+/**
+ * Get products based on featured column
+ * This function fetches products from the database based on the featured column if columns is True the values will be returned.
+ * @returns {Promise<Array>} - A promise that resolves to an array of product objects.
+ */
+export async function getFeaturedProducts() {
+  const query = `
+    SELECT
+    p.product_id,
+      p.name,
+      p.price,
+      p.quantity_in_stock,
+      p.image_url
+    FROM public.products p
+    WHERE p.featured IS NULL
+  `;
+  try {
+    const result = await db.query(query);
+    return result.rows;
+  } catch (error) {
+    console.error('Error fetching featured products:', error);
+    throw error;
+  }
+}
+
+/**
+ * Get products based on the raiting of the product
+ * This function fetches products from the database based on the rating in the review table, if rating >= 4 the products will be returned.
+ * @returns {Promise<Array>} - A promise that resolves to an array of product objects.
+ */
+export async function getProductsByRating() {
+  const query = `
+    SELECT
+      p.product_id,
+      p.name,
+      p.price,
+      p.quantity_in_stock,
+      p.image_url
+    FROM public.products p
+    JOIN public.reviews r ON p.product_id = r.product_id
+    WHERE r.rating >= 4
+  `;
+  try {
+    const result = await db.query(query);
+    return result.rows;
+  } catch (error) {
+    console.error('Error fetching products by rating:', error);
+    throw error;
+  }
+}
