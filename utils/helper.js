@@ -94,3 +94,23 @@ export function deleteItemFromLocalStorage(key, productId) {
     setLocalStorage(key, value);
   }
 }
+
+// utils/findItemInLocalStorage.js
+
+/**
+ * Find the value of a given key in local storage.
+ *
+ * @param {string} key - The key of the value to find in local storage.
+ * @param {string} itemId - The ID of the item to find in local storage.
+ * @returns {Object} - The found value, or null if not found.
+ */
+export function findItemInLocalStorage(key, productId) {
+  // Get the value from local storage
+  const value = getLocalStorage(key);
+
+  // Find the item with the given ID in the array
+  const item = value.find((item) => item.productId === productId);
+
+  // Return the found item, or null if not found
+  return item || null;
+}

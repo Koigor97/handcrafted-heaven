@@ -7,7 +7,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel,
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { getLocalStorage, deleteItemFromLocalStorage } from '@/utils/helper';
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import Image from 'next/image';
 
 export default function ToolBar() {
@@ -52,9 +52,25 @@ function WishlistPopover() {
 
     const [wishlistItems, setWishlistItems] = useState(wishlist);
 
+    const handleStorageUpdate = () => {
+        const updatedWishlist = getLocalStorage('wishlist');
+        setWishlistItems(updatedWishlist);
+    }
+
+    useEffect(() => {
+
+        window.addEventListener('wishlistUpdated', handleStorageUpdate);
+
+        return () => {
+            window.removeEventListener('wishlistUpdated', handleStorageUpdate);
+        }
+    }, [])
+
     const handleDeleteItem = (productId) => {
         deleteItemFromLocalStorage('wishlist', productId);
         setWishlistItems(getLocalStorage('wishlist'));
+
+        window.dispatchEvent(new Event('deletedFromWishlist'));
     }
 
     return (
