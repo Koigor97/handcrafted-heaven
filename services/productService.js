@@ -229,7 +229,7 @@ export async function getFeaturedProducts() {
       p.quantity_in_stock,
       p.image_url
     FROM public.products p
-    WHERE p.featured IS NULL
+    WHERE p.featured
   `;
   try {
     const result = await db.query(query);
@@ -247,7 +247,7 @@ export async function getFeaturedProducts() {
  */
 export async function getProductsByRating() {
   const query = `
-    SELECT
+    SELECT DISTINCT
       p.product_id,
       p.name,
       p.price,
