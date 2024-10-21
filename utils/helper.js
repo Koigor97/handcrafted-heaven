@@ -1,3 +1,5 @@
+// utils/formatPrice.js
+
 /**
  * Format a given number as a currency value.
  * This function uses the Intl.NumberFormat API to format a numeric value into a specific currency.
