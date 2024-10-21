@@ -1,19 +1,25 @@
 // import { getAllProducts, getProductById } from "@/services/productService";
+import HeroMain from '@/components/layout/HeroMain';
+import BannerArrivals from '@/components/layout/BannerArrivals';
+import ArtisansSection from '@/components/layout/ArtistSection';
+import HeaderMenu from '@/components/layout/HeaderMenu';
+import FeaturedSection from '@/components/layout/FeaturedSection';
+import BestSellerSection from '@/components/layout/BestSellerSection';
 
-export default async function Home() {
+
+
+export default async function Home({searchParams}) {
   // const products = await getProductById("e41bc845-8e19-403d-96eb-f9aa691df447");
   // console.log(products);
 
   return (
-    <div>
-      <h1>Welcome to Handcrafted Haven</h1>
-      <p>
-        Handcrafted Haven is an online marketplace connecting artisans with
-        consumers who value unique, handmade creations. Explore a curated
-        selection of pottery, furniture, jewelry, and other beautifully crafted
-        items, all made by skilled artisans. Shop for one-of-a-kind treasures
-        and support small businesses dedicated to craftsmanship and creativity.
-      </p>
-    </div>
+    <>
+    <HeaderMenu searchParams={searchParams}/>
+    <HeroMain />
+    <FeaturedSection/>
+    <BestSellerSection/>
+    <BannerArrivals />
+    <ArtisansSection />
+    </>
   );
 }

@@ -26,7 +26,7 @@
  * @requires ../lib/db
  */
 
-import db from "../lib/db";
+import db from '../lib/db';
 
 /**
  * Get all products from the database.
@@ -36,15 +36,15 @@ import db from "../lib/db";
  */
 export async function getAllProducts() {
   const query = `
-    SELECT 
-      p.product_id, 
-      p.name, 
-      p.description, 
-      p.price, 
-      p.quantity_in_stock, 
-      p.image_url, 
-      a.shop_name AS artisan_name, 
-      c.name AS category_name 
+    SELECT
+      p.product_id,
+      p.name,
+      p.description,
+      p.price,
+      p.quantity_in_stock,
+      p.image_url,
+      a.shop_name AS artisan_name,
+      c.name AS category_name
     FROM public.products p
     JOIN public.artisans a ON p.artisan_id = a.artisan_id
     JOIN public.categories c ON p.category_id = c.category_id
@@ -54,7 +54,7 @@ export async function getAllProducts() {
     const result = await db.query(query);
     return result.rows;
   } catch (error) {
-    console.error("Error fetching products:", error);
+    console.error('Error fetching products:', error);
     throw error;
   }
 }
@@ -67,15 +67,15 @@ export async function getAllProducts() {
  */
 export async function getProductById(productId) {
   const query = `
-    SELECT 
-      p.product_id, 
-      p.name, 
-      p.description, 
-      p.price, 
-      p.quantity_in_stock, 
-      p.image_url, 
-      a.shop_name AS artisan_name, 
-      c.name AS category_name 
+    SELECT
+      p.product_id,
+      p.name,
+      p.description,
+      p.price,
+      p.quantity_in_stock,
+      p.image_url,
+      a.shop_name AS artisan_name,
+      c.name AS category_name
     FROM public.products p
     JOIN public.artisans a ON p.artisan_id = a.artisan_id
     JOIN public.categories c ON p.category_id = c.category_id
@@ -116,14 +116,14 @@ export async function addProduct(product) {
     product.quantity_in_stock,
     product.image_url,
     product.artisan_id,
-    product.category_id,
+    product.category_id
   ];
 
   try {
     const result = await db.query(query, values);
     return result.rows[0];
   } catch (error) {
-    console.error("Error adding new product:", error);
+    console.error('Error adding new product:', error);
     throw error;
   }
 }
@@ -137,7 +137,7 @@ export async function addProduct(product) {
  */
 export async function updateProduct(productId, productData) {
   const query = `
-    UPDATE public.products 
+    UPDATE public.products
     SET name = $1, description = $2, price = $3, quantity_in_stock = $4, image_url = $5, artisan_id = $6, category_id = $7
     WHERE product_id = $8
     RETURNING *;
@@ -150,7 +150,7 @@ export async function updateProduct(productId, productData) {
     productData.image_url,
     productData.artisan_id,
     productData.category_id,
-    productId,
+    productId
   ];
 
   try {
@@ -176,6 +176,92 @@ export async function deleteProduct(productId) {
     await db.query(query, [productId]);
   } catch (error) {
     console.error(`Error deleting product with ID ${productId}:`, error);
+    throw error;
+  }
+}
+
+/**
+ * Get products based on a query
+ *
+ * @param {string} searchQuery - The query from the search bar
+ * @returns {Promise<Array>} - A promise that resolves to an array of product objects.
+ */
+export async function getFilteredProducts(searchQuery) {
+  const searchTerm = '%' + searchQuery + '%';
+  const query = ` SELECT
+      p.product_id,
+      p.name,
+      p.description,
+      p.price,
+      p.quantity_in_stock,
+      p.image_url,
+      a.shop_name AS artisan_name,
+      c.name AS category_name
+    FROM public.products p
+    JOIN public.artisans a ON p.artisan_id = a.artisan_id
+    JOIN public.categories c ON p.category_id = c.category_id
+    WHERE
+      p.name ILIKE $1 OR
+      c.name ILIKE $1 OR
+      p.price::text ILIKE $1
+    `;
+
+  try {
+    const result = await db.query(query, [searchTerm]);
+    return result.rows;
+  } catch (error) {
+    console.error('Error fetching products:', error);
+    throw error;
+  }
+}
+
+/**
+ * Get products based on featured column
+ * This function fetches products from the database based on the featured column if columns is True the values will be returned.
+ * @returns {Promise<Array>} - A promise that resolves to an array of product objects.
+ */
+export async function getFeaturedProducts() {
+  const query = `
+    SELECT
+    p.product_id,
+      p.name,
+      p.price,
+      p.quantity_in_stock,
+      p.image_url
+    FROM public.products p
+    WHERE p.featured
+  `;
+  try {
+    const result = await db.query(query);
+    return result.rows;
+  } catch (error) {
+    console.error('Error fetching featured products:', error);
+    throw error;
+  }
+}
+
+/**
+ * Get products based on the raiting of the product
+ * This function fetches products from the database based on the rating in the review table, if rating >= 4 the products will be returned.
+ * @returns {Promise<Array>} - A promise that resolves to an array of product objects.
+ */
+export async function getProductsByRating() {
+  const query = `
+    SELECT DISTINCT
+      p.product_id,
+      p.name,
+      p.price,
+      p.quantity_in_stock,
+      p.image_url
+    FROM public.products p
+    JOIN public.reviews r ON p.product_id = r.product_id
+    WHERE r.rating >= 4
+  `;
+  try {
+    const result = await db.query(query);
+    return result.rows;
+  } catch (error) {
+    console.error('Error fetching products by rating:', error);
     throw error;
   }
 }

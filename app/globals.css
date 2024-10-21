@@ -16,7 +16,7 @@ html {
   :root {
     /**
     * change the default shadcn UI base colors
-    * to the project colors 
+    * to the project colors
     */
     --background: 37 31% 95%;
     --foreground: 0 0% 20%;
