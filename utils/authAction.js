@@ -3,7 +3,7 @@
 import { redirect } from 'next/navigation';
 import { cookies } from 'next/headers';
 
-import { convertImage, uploadImageToCloudinary } from './helper';
+import { convertImage, uploadImageToCloudinary } from './cloudinaryHelper';
 import { createToken } from '@/lib/auth';
 import {
   createUserAccount,

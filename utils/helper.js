@@ -1,5 +1,3 @@
-import cloudinary from '@/lib/cloudinary';
-
 /**
  * Format a given number as a currency value.
  * This function uses the Intl.NumberFormat API to format a numeric value into a specific currency.
@@ -113,23 +111,4 @@ export function findItemInLocalStorage(key, productId) {
 
   // Return the found item, or null if not found
   return item || null;
-}
-
-export async function convertImage(image) {
-  const imageData = await image.arrayBuffer();
-  const mime = image.type;
-  const encoding = 'base64';
-  const base64Data = Buffer.from(imageData).toString('base64');
-  const fileUri = 'data:' + mime + ';' + encoding + ',' + base64Data;
-  return fileUri;
-}
-
-export async function uploadImageToCloudinary(fn, imageFile, folderName) {
-  if (!imageFile) return;
-
-  const fileUri = await fn(imageFile);
-  const result = await cloudinary.uploader.upload(fileUri, {
-    folder: folderName
-  });
-  return result.secure_url;
 }
