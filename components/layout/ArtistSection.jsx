@@ -1,4 +1,5 @@
 import db from '../../lib/db';
+// import Image from 'next/image'; // Import the Image component
 
 export default async function ArtisansSection() {
   const artisans = await getAllArtisans();

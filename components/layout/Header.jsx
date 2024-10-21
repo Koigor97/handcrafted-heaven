@@ -84,7 +84,7 @@ function Header() {
                             <Button 
                                 variant={activeButton === "signup" ? "outline" : "default"}
                                 onClick={handleSignUpClick} 
-                                className="px-4 py-2 text-xs sm:text-sm md:text-base border border-accent2-500 whitespace-nowrap"
+                                className="px-2 py-1 text-xs sm:text-sm md:text-base border border-accent2-500 whitespace-nowrap"
                             >
                                 Sign Up
                             </Button>
@@ -110,7 +110,7 @@ function Header() {
                             <Button 
                                 variant={activeButton === "login" ? "outline" : "default"} 
                                 onClick={handleLoginClick}
-                                className="px-4 py-2 text-xs sm:text-sm md:text-base border border-accent2-500 whitespace-nowrap"
+                                className="px-2 py-1 text-xs sm:text-sm md:text-base border border-accent2-500 whitespace-nowrap"
                             >
                                 Login
                             </Button>
@@ -143,8 +143,8 @@ function Header() {
                         <XIcon className="h-10 w-10 text-gray-800" />
                     </button>
 
-                    <div className="flex flex-col items-center space-y-4 mt-4">
-                        <NavLinks className="text-sm sm:text-base md:text-lg" />
+                    <div className="flex flex-col items-center space-y-4 mt-4 text-sm sm:text-base md:text-lg">
+                        <NavLinks setIsOpen={setIsOpen} />
                     </div>
 
                     <div className="flex justify-center space-x-2 mb-4 mt-7">

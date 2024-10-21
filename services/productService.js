@@ -265,3 +265,27 @@ export async function getProductsByRating() {
     throw error;
   }
 }
+
+/**
+ * Get all categories with product count.
+ */
+export async function getCategories() {
+  const query = `
+    SELECT
+      c.name,
+      COUNT(p.product_id) AS count
+    FROM public.categories c
+    LEFT JOIN public.products p ON p.category_id = c.category_id
+    GROUP BY c.category_id
+    ORDER BY count DESC
+  `;
+
+  try {
+    const result = await db.query(query);
+    return result.rows;
+  } catch (error) {
+    console.error('Error fetching categories:', error);
+    throw error;
+  }
+}
+

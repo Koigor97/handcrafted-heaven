@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { FaHeart } from 'react-icons/fa';
@@ -21,10 +21,10 @@ function Product({ id, image, name, price, quantity }) {
     }
   };
 
-  const checkProductInWishlist = () => {
+  const checkProductInWishlist = useCallback(() => {
     const isProductInWishlist = findItemInLocalStorage('wishlist', id);
     setIsWishlisted(isProductInWishlist);
-  }
+  }, [id]);
 
   useEffect(() => {
 
@@ -36,7 +36,7 @@ function Product({ id, image, name, price, quantity }) {
       window.removeEventListener('deletedFromWishlist', checkProductInWishlist)
     }
 
-  }, [id])
+  }, [id, checkProductInWishlist])
 
   return (
     <div className="relative bg-white rounded-lg shadow-lg overflow-hidden p-3 max-w-[200px] mx-auto w-full">
