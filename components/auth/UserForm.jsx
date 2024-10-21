@@ -47,9 +47,7 @@ export function UserForm({ errors }) {
           required
         />
         {errors?.password && (
-          <div className="text-sm text-red-500">{errors.password.map((error, i) => (
-            <p key={i}>{error}</p>
-          ))}</div>
+          <p className="text-sm text-red-500">{errors.password}</p>
         )}
       </div>
       <div className="grid gap-2">

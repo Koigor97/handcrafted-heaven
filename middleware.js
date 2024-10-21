@@ -7,23 +7,21 @@ export default async function middleware(request) {
 
   const verifiedToken = token && (await verifyToken(token));
 
-  if (request.nextUrl.pathname.startsWith('/auth/login') && !verifiedToken) {
-    return;
+  if (!verifiedToken) {
+    return NextResponse.redirect(new URL('/auth/login', request.url));
   }
 
-  // if (
-  //   (request.url.includes('/login') || request.url.includes('/signup')) &&
-  //   verifiedToken
-  // ) {
-  //   console.log('You are already logged in');
-  //   return NextResponse.redirect(new URL('/', request.url));
-  // }
+  if (request.nextUrl.pathname === '/dashboard') {
+    const role = verifiedToken?.role;
 
-  const role = verifiedToken?.role;
-
-  if (request.nextUrl.pathname.startsWith('/dashboard') && role != 'artisan') {
-    return NextResponse.redirect(new URL('/auth/onboarding', request.url));
+    if (role !== 'artisan') {
+      return NextResponse.redirect(new URL('/auth/onboarding', request.url));
+    }
   }
 
   return NextResponse.next();
 }
+
+export const config = {
+  matcher: ['/dashboard', '/cart', '/orders', '/profile', '/checkout']
+};

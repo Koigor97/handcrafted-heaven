@@ -7,16 +7,9 @@ export const UserFormSchema = z.object({
   email: z.string().email({ message: 'Email is invalid' }),
   password: z
     .string()
-    .min(8, { message: 'Password must be at least 8 characters long' })
-    .regex(/[a-z]/, {
-      message: 'Password must contain at least one lowercase letter'
-    })
-    .regex(/[A-Z]/, {
-      message: 'Password must contain at least one uppercase letter'
-    })
-    .regex(/\d/, { message: 'Password must contain at least one number' })
-    .regex(/[\W_]/, {
-      message: 'Password must contain at least one special character'
+    .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/, {
+      message:
+        'Password must be at least 8 characters long, contain at least one lowercase letter, one uppercase letter, one number, and one special character.'
     }),
   phone: z.string().regex(/^\(?([0-9]{3})\)?[- ]([0-9]{3})[-]([0-9]{4})$/, {
     message:

@@ -31,7 +31,7 @@ function SignUpPage() {
       <CardContent>
         <form action={formAction}>
           {/* User Information Form */}
-          <UserForm errors={state.errors} />
+          <UserForm errors={state?.errors} />
 
           {/* Action Buttons */}
           <div className="mt-6 flex flex-col gap-4 md:flex-row md:gap-6">

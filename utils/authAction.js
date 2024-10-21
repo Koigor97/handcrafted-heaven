@@ -11,6 +11,9 @@ import {
 } from '@/services/createAccountService';
 import { UserFormSchema } from '@/services/schemas/UserFormSchema';
 import { ArtisanFormSchema } from '@/services/schemas/ArtisanFormSchema';
+import { LoginFormSchema } from '@/services/schemas/LoginFormSchema';
+import { getUserByEmail } from '@/services/userService';
+import bcrypt from 'bcryptjs';
 
 /**************** ARTISAN ACCOUNT FORM ACTION  *****************/
 /**
@@ -133,7 +136,6 @@ export async function userAccountAction(previousState, formData) {
   };
 
   const validationResult = UserFormSchema.safeParse(isFormDataValid);
-
   if (!validationResult.success) {
     return {
       errors: validationResult.error.flatten().fieldErrors,
@@ -163,12 +165,69 @@ export async function userAccountAction(previousState, formData) {
 
   const user = await createUserAccount(userData);
   const token = await createToken(user);
-  // console.log('user', user);
-  // console.log('token', token);
 
   cookies().set('token', token, {
     httpOnly: true
   });
 
+  redirect('/');
+}
+
+/***************** LOGIN FORM ACTION  **************************
+/**
+ * Creates a new user account.
+ *
+ * @param {Object} previousState - Previous form state.
+ * @param {FormData} formData - Form data.
+ *
+ * @returns {VoidFunction} - Returns the newly created user object or an array of error objects.
+ */
+export async function loginAction(previousState, formData) {
+  const email = formData.get('email');
+  const password = formData.get('password');
+
+  /**
+   * validate email, password using useFormState
+   */
+  const isFormDataValid = {
+    email,
+    password
+  };
+
+  const validationResult = LoginFormSchema.safeParse(isFormDataValid);
+
+  if (!validationResult.success) {
+    return {
+      errors: validationResult.error.flatten().fieldErrors,
+      mesagge: 'Failed to login'
+    };
+  }
+
+  const user = await getUserByEmail(email);
+
+  if (!user) {
+    return {
+      errors: { email: ['User not found, check your email'] },
+      message: 'User not found, try again'
+    };
+  }
+
+  const isPasswordValid = await bcrypt.compare(password, user.password);
+  delete user.password;
+  if (!isPasswordValid) {
+    return {
+      errors: { password: ['Incorrect password, try again'] },
+      message: 'Incorrect password, try again'
+    };
+  }
+  const token = await createToken(user);
+
+  cookies().set('token', token, {
+    httpOnly: true
+  });
+
+  if (user.role === 'artisan') {
+    redirect('/dashboard');
+  }
   redirect('/');
 }
