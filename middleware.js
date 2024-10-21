@@ -19,13 +19,9 @@ export default async function middleware(request) {
   //   return NextResponse.redirect(new URL('/', request.url));
   // }
 
-  const {
-    role
-  } = async () => {
-    if (verifiedToken) verifiedToken.payload;
-  };
+  const role = verifiedToken?.role;
 
-  if (request.nextUrl.pathname.startsWith('/dashboard') && role !== 'artisan') {
+  if (request.nextUrl.pathname.startsWith('/dashboard') && role != 'artisan') {
     return NextResponse.redirect(new URL('/auth/onboarding', request.url));
   }
 

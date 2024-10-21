@@ -47,12 +47,14 @@ export function UserForm({ errors }) {
           required
         />
         {errors?.password && (
-          <p className="text-sm text-red-500">{errors.password}</p>
+          <div className="text-sm text-red-500">{errors.password.map((error, i) => (
+            <p key={i}>{error}</p>
+          ))}</div>
         )}
       </div>
       <div className="grid gap-2">
-        <Label htmlFor="phone">Phone Number</Label>
-        <Input id="phone" type="tel" className="h-8" name="phone" required />
+        <Label htmlFor="phone">Phone Number<span className="text-red-500">*</span></Label>
+        <Input id="phone" type="tel" className="h-8" name="phone" required placeholder='XXX-XXX-XXXX or (XXX) XXX-XXXX'/>
         {errors?.phone && (
           <p className="text-sm text-red-500">{errors.phone}</p>
         )}

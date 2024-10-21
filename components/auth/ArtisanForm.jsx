@@ -18,7 +18,7 @@ export default function ArtisanForm({ errors }) {
           name="shop_name"
           required
         />
-        {errors.shop_name && (
+        {errors?.shop_name && (
           <p className="text-sm text-red-500">{errors.shop_name}</p>
         )}
       </div>
@@ -32,7 +32,7 @@ export default function ArtisanForm({ errors }) {
           name="shop_description"
           required
         />
-        {errors.shop_description && (
+        {errors?.shop_description && (
           <p className="text-sm text-red-500">{errors.shop_description}</p>
         )}
       </div>
@@ -42,7 +42,7 @@ export default function ArtisanForm({ errors }) {
       </div>
       <div className="grid gap-2">
         <ImagePicker label={"Shop Logo"} name={"shop_logo_url"} />
-        {errors.shop_logo_url && (
+        {errors?.shop_logo_url && (
           <p className="text-sm text-red-500">{errors.shop_logo_url}</p>
         )}
       </div>

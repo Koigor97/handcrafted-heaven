@@ -18,24 +18,8 @@ import { UserForm } from "../auth/UserForm";
 import ArtisanForm from "../auth/ArtisanForm";
 
 function ArtisanOnBoardingForm({ artisanAccountAction }) {
-  const [state, formAction] = useFormState(artisanAccountAction, {});
-
-  // Safely reduce errors into an object if errors exist and it's an array
-  const errors = Array.isArray(state)
-    ? state.reduce((acc, errorObj) => {
-        const key = Object.keys(errorObj)[0];
-        const message = errorObj[key];
-
-        // If key exists, concatenate the new error message, else assign the first error
-        if (acc[key]) {
-          acc[key] = `${acc[key]}, ${message}`;
-        } else {
-          acc[key] = message;
-        }
-
-        return acc;
-      }, {})
-    : {}; // Default to an empty object if errors are not an array
+  const initialState = {message: null, errors: {}}
+  const [state, formAction] = useFormState(artisanAccountAction, initialState);
 
   return (
     <Card className="mx-auto max-w-4xl bg-accent1-100 p-6 md:my-5">
@@ -49,10 +33,10 @@ function ArtisanOnBoardingForm({ artisanAccountAction }) {
         <form action={formAction}>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {/* User Information Form */}
-            <UserForm errors={errors} />
+            <UserForm errors={state?.errors} />
 
             {/* Artisan Information Form */}
-            <ArtisanForm errors={errors} />
+            <ArtisanForm errors={state?.errors} />
           </div>
 
           {/* Action Buttons */}

@@ -17,25 +17,8 @@ import {
 } from "@/components/ui/card";
 
 function SignUpPage() {
-  const [state, formAction] = useFormState(userAccountAction, {});
-
-  // Safely reduce errors into an object if errors exist and it's an array
-  // Safely reduce errors into an object if errors exist and it's an array
-  const errors = Array.isArray(state)
-    ? state.reduce((acc, errorObj) => {
-        const key = Object.keys(errorObj)[0];
-        const message = errorObj[key];
-
-        // If key exists, concatenate the new error message, else assign the first error
-        if (acc[key]) {
-          acc[key] = `${acc[key]}, ${message}`;
-        } else {
-          acc[key] = message;
-        }
-
-        return acc;
-      }, {})
-    : {}; // Default to an empty object if errors are not an array
+  const initialState = {message: null, errors: {}}
+  const [state, formAction] = useFormState(userAccountAction, initialState);
 
   return (
     <Card className="mx-auto max-w-sm bg-accent1-100 my-5">
@@ -48,7 +31,7 @@ function SignUpPage() {
       <CardContent>
         <form action={formAction}>
           {/* User Information Form */}
-          <UserForm errors={errors} />
+          <UserForm errors={state.errors} />
 
           {/* Action Buttons */}
           <div className="mt-6 flex flex-col gap-4 md:flex-row md:gap-6">

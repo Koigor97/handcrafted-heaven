@@ -3,17 +3,14 @@
 import { redirect } from 'next/navigation';
 import { cookies } from 'next/headers';
 
-import {
-  validateForm,
-  convertImage,
-  uploadImageToCloudinary,
-  validateUser
-} from './helper';
+import { convertImage, uploadImageToCloudinary } from './helper';
 import { createToken } from '@/lib/auth';
 import {
   createUserAccount,
   createArtisanAccount
 } from '@/services/createAccountService';
+import { UserFormSchema } from '@/services/schemas/UserFormSchema';
+import { ArtisanFormSchema } from '@/services/schemas/ArtisanFormSchema';
 
 /**************** ARTISAN ACCOUNT FORM ACTION  *****************/
 /**
@@ -45,11 +42,17 @@ export async function artisanAccountAction(previousState, formData) {
     phone,
     shop_name,
     shop_description,
-    shopLogoUrl
+    shop_logo_url: shopLogoUrl
   };
-  const errors = validateForm(isFormDataValid);
 
-  if (errors.length > 0) return errors;
+  const validationResult = ArtisanFormSchema.safeParse(isFormDataValid);
+
+  if (!validationResult.success) {
+    return {
+      errors: validationResult.error.flatten().fieldErrors,
+      mesagge: 'Failed to create user account'
+    };
+  }
 
   let user_image_url;
 
@@ -85,6 +88,7 @@ export async function artisanAccountAction(previousState, formData) {
   };
 
   const user = await createUserAccount(userData);
+  const token = await createToken(user);
 
   const artisanData = {
     user_id: user.user_id,
@@ -95,6 +99,10 @@ export async function artisanAccountAction(previousState, formData) {
   };
 
   const artisan = await createArtisanAccount(artisanData);
+
+  cookies().set('token', token, {
+    httpOnly: true
+  });
   redirect('/dashboard');
 }
 
@@ -123,9 +131,15 @@ export async function userAccountAction(previousState, formData) {
     password,
     phone
   };
-  // const errors = validateUser(isFormDataValid);
 
-  // if (errors.length > 0) return errors;
+  const validationResult = UserFormSchema.safeParse(isFormDataValid);
+
+  if (!validationResult.success) {
+    return {
+      errors: validationResult.error.flatten().fieldErrors,
+      mesagge: 'Failed to create user account'
+    };
+  }
 
   let user_image_url;
 
@@ -149,8 +163,8 @@ export async function userAccountAction(previousState, formData) {
 
   const user = await createUserAccount(userData);
   const token = await createToken(user);
-  console.log('user', user);
-  console.log('token', token);
+  // console.log('user', user);
+  // console.log('token', token);
 
   cookies().set('token', token, {
     httpOnly: true
