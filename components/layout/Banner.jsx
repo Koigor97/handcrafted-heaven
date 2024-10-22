@@ -5,7 +5,7 @@ import { Button } from "../ui/button";
 function Banner() {
   return (
     <div className="flex justify-between bg-accent2-500 py-3 px-5">
-      <div className="flex items-center gap-5">
+      <div className="flex items-center gap-5 max-w-custom-clamp md:mx-auto">
         <p className="text-sm text-background text-ellipsis w-fit truncate max-w-32 md:text-base md:max-w-full">
           Save up to 70% on our Furniture sales
         </p>
