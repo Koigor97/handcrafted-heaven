@@ -12,8 +12,9 @@ import {
 import { UserFormSchema } from '@/services/schemas/UserFormSchema';
 import { ArtisanFormSchema } from '@/services/schemas/ArtisanFormSchema';
 import { LoginFormSchema } from '@/services/schemas/LoginFormSchema';
-import { getUserByEmail } from '@/services/userService';
+import { getUserByEmail, getUserLoginById } from '@/services/userService';
 import bcrypt from 'bcryptjs';
+import { verifyToken } from '@/lib/auth';
 
 /**************** ARTISAN ACCOUNT FORM ACTION  *****************/
 /**
@@ -230,4 +231,32 @@ export async function loginAction(previousState, formData) {
     redirect('/dashboard');
   }
   redirect('/');
+}
+
+/***************** IS USER LOGGED IN ACTIONS *****************/
+/**
+ * Check if the user is logged in and send the user image, name, id and role
+ *
+ * @returns {Object} - Returns the user that has the token on the cookie
+ */
+export async function isUserLoggedIn() {
+  const token = cookies().get('token')?.value;
+
+  const verifiedToken = token && (await verifyToken(token));
+  if (!verifiedToken) {
+    return null;
+  }
+  const user = await getUserLoginById(verifiedToken?.id);
+  return user;
+}
+
+/***************** Log out Action *****************************/
+/**
+ * Logs out the user by deleting the cookie with the token
+ *
+ * @returns {void} - The function does not return any value
+ */
+export async function logOut() {
+  // Delete the token cookie
+  cookies().delete('token');
 }
