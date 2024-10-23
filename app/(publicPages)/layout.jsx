@@ -1,6 +1,5 @@
 // import Banner from "@/components/layout/Banner";
 
-import { nunito } from "../font";
 import "../globals.css";
 import Footer from "@/components/layout/Footer";
 // import Brand from "@/components/common/Brand";
@@ -65,18 +64,16 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
-      <body className={`${nunito.className} `}>
-        <header className="bg-primary ">
-          <Header />
-        </header>
+    <>
+      <header className="bg-primary ">
+        <Header />
+      </header>
 
-        <main className="">{children}</main>
+      <main className="">{children}</main>
 
-        <footer className="bg-primary py-8">
-          <Footer />
-        </footer>
-      </body>
-    </html>
+      <footer className="bg-primary py-8">
+        <Footer />
+      </footer>
+    </>
   );
 }
