@@ -1,5 +1,5 @@
 import { nunito } from "./font";
-import "../app/globals.css";
+import "./globals.css";
 
 function PrivatePageLayout({ children }) {
   return (

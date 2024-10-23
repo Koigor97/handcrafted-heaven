@@ -65,18 +65,16 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
-      <body className={`${nunito.className} `}>
-        <header className="bg-primary ">
-          <Header />
-        </header>
+    <>
+      <header className="bg-primary ">
+        <Header />
+      </header>
 
-        <main className="">{children}</main>
+      <main className="">{children}</main>
 
-        <footer className="bg-primary py-8">
-          <Footer />
-        </footer>
-      </body>
-    </html>
+      <footer className="bg-primary py-8">
+        <Footer />
+      </footer>
+    </>
   );
 }

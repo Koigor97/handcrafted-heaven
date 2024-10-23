@@ -1,8 +1,10 @@
+import SearchBar from "@/components/common/SearchBar";
+
 function ProductListPage() {
   return (
-    <div>
-      <h1>Product List Page</h1>
-    </div>
+    <section>
+      <SearchBar />
+    </section>
   );
 }
 

@@ -1,3 +1,4 @@
+import DashboardHeader from "@/components/layout/DashboardHeader";
 import SidebarDashboard from "@/components/layout/SidebarDashboard";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 
@@ -11,6 +12,7 @@ export default function DashboardLayout({
       </div>
       <main className="w-full py-3 px-5 ">
         <SidebarTrigger />
+        <DashboardHeader />
         {children}
       </main>
     </SidebarProvider>
