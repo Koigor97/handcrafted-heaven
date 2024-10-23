@@ -43,7 +43,7 @@ function Product({ id, image, name, price, quantity }) {
       <button onClick={handleWishlistClick} className="absolute top-2 right-2 text-gray-300 hover:text-red-500">
         <FaHeart className={`text-lg ${isWishlisted ? 'text-red-500' : ''}`} />
       </button>
-      <Link href={`/product/${id}`}>
+      <Link href={`products/${id}`}>
         {image ? (
           <Image
             src={image}
@@ -59,7 +59,7 @@ function Product({ id, image, name, price, quantity }) {
         )}
       </Link>
       <div className="p-2 text-center">
-        <Link href={`/product/${id}`}>
+        <Link href={`products/${id}`}>
           <h3 className="font-bold text-sm truncate">{name}</h3>
         </Link>
         <p className="text-sm text-gray-600">${Number(price || 0).toFixed(2)}</p>
