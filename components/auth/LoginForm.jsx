@@ -11,9 +11,9 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-export default function LoginForm({errors}) {
+export default function LoginForm({ errors }) {
   return (
-    <Card className="mx-auto max-w-sm bg-accent1-100 my-5">
+    <Card className="mx-3 mt-5 bg-accent1-100 md:mx-auto md:max-w-sm md:mt-16">
       <CardHeader>
         <CardTitle className="text-1xl">Login</CardTitle>
         <CardDescription>
