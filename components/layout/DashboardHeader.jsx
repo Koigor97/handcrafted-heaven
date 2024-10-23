@@ -27,7 +27,7 @@ function DashboardHeader({
               className=""
             />
           </div>
-          <h2>{storeName}'s Store</h2>
+          <h2>{storeName}&apos;s Store</h2>
         </div>
         <p>Today: {formatDashboardDate(new Date())}</p>
       </div>
