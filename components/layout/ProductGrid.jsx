@@ -2,7 +2,7 @@ import Product from '../common/Product';
 
 export default function ProductGrid({ products }) {
   return (
-    <div className="p-4 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">
+    <div className="p-4 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6 mx-auto">
       {products.map(product => (
         <Product
           key={product.product_id}
