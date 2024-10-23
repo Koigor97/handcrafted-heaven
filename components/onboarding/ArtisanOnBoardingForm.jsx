@@ -18,11 +18,11 @@ import { UserForm } from "../auth/UserForm";
 import ArtisanForm from "../auth/ArtisanForm";
 
 function ArtisanOnBoardingForm({ artisanAccountAction }) {
-  const initialState = {message: null, errors: {}}
+  const initialState = { message: null, errors: {} };
   const [state, formAction] = useFormState(artisanAccountAction, initialState);
 
   return (
-    <Card className="mx-auto max-w-4xl bg-accent1-100 p-6 md:my-5">
+    <Card className="mx-auto max-w-4xl bg-accent1-100 p-6 md:mt-16 ">
       <CardHeader>
         <CardTitle className="text-xl">Sign Up as an Artisan</CardTitle>
         <CardDescription>

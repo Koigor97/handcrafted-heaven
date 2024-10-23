@@ -17,11 +17,11 @@ import {
 } from "@/components/ui/card";
 
 function SignUpPage() {
-  const initialState = {message: null, errors: {}}
+  const initialState = { message: null, errors: {} };
   const [state, formAction] = useFormState(userAccountAction, initialState);
 
   return (
-    <Card className="mx-auto max-w-sm bg-accent1-100 my-5">
+    <Card className="mx-3 mt-5 bg-accent1-100 md:mx-auto md:max-w-sm md:mt-16">
       <CardHeader>
         <CardTitle className="text-xl">Sign Up as a User</CardTitle>
         <CardDescription>
