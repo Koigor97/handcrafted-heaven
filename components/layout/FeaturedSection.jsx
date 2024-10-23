@@ -1,5 +1,6 @@
 import ProductSlider from '@/components/common/ProductSlider';
 import { getFeaturedProducts } from '@/services/productService';
+import { Frown } from 'lucide-react';
 
 export default async function FeaturedSection() {
     const products = await getFeaturedProducts();

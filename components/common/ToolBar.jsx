@@ -1,6 +1,6 @@
 'use client';
 
-import { ShoppingCart, Heart, X, User, Package, LogOut} from 'lucide-react';
+import { ShoppingCart, Heart, X, User, Package, LogOut, UserCheck} from 'lucide-react';
 import {Tooltip, TooltipContent, TooltipProvider, TooltipTrigger} from '@/components/ui/tooltip';
 import {Popover, PopoverTrigger, PopoverContent} from "@/components/ui/popover";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger, DropdownMenuSeparator } from '@/components/ui/dropdown-menu';
@@ -8,7 +8,9 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { getLocalStorage, deleteItemFromLocalStorage } from '@/utils/helper';
 import {useEffect, useState} from 'react';
+import { useRouter } from 'next/navigation';
 import Image from 'next/image';
+import { isUserLoggedIn, logOut } from '@/utils/authAction';
 
 export default function ToolBar() {
 
@@ -23,13 +25,41 @@ export default function ToolBar() {
 
 function AvatarMenu() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [user, setUser] = useState({})
+    const router = useRouter()
 
+    useEffect(()=> {
+        const fetchUser = async () => {
+
+            try {
+                    const user = await isUserLoggedIn();
+                    setIsLoggedIn(!!user);
+                    setUser(user)
+                } catch (error) {
+                console.log(error);
+            }
+        }
+
+        fetchUser();
+    }, [])
+
+    const handleLogOut = async () => {
+        await logOut();
+        setUser(null)
+        setIsLoggedIn(false)
+        router.push('/')
+    }
     return (
             isLoggedIn ? (
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                         <Button className="h-10 w-10 flex items-center justify-center rounded-full bg-primary p-0 focus:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0">
-                            <Image src="https://res.cloudinary.com/handcrafted-haven/image/upload/v1727335990/rajesh-kumar_u8q6ja.webp" alt="avatar" width={40} height={40} className="rounded-full object-cover"/>
+                            {
+                                user.user_image_url ? (
+
+                                    <Image src={user.user_image_url} alt={`${user.name} image`} width={40} height={40} className="rounded-full object-cover"/>
+                                ) : (<UserCheck data-name={user.name} />)
+                            }
                         </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent className="w-80 bg-primary border-none">
@@ -37,7 +67,9 @@ function AvatarMenu() {
                         <DropdownMenuItem className="text-text-800"><Link href="/profile" className="flex flex-row gap-2"><User className="stroke-1"/> My Profile</Link></DropdownMenuItem>
                         <DropdownMenuItem className="text-text-800"><Link href="/orders" className="flex flex-row gap-2"><Package className="stroke-1"/> My Orders</Link></DropdownMenuItem>
                         <DropdownMenuSeparator className="bg-background1-300"/>
-                        <DropdownMenuItem className="text-text-800 gap-2"><LogOut className="stroke-1"/> Log Out</DropdownMenuItem>
+                        <DropdownMenuItem className="text-text-800 gap-2 cursor-pointer" onClick={handleLogOut}>
+                                <LogOut className="stroke-1"/> Log Out
+                        </DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>
 
