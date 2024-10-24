@@ -1,7 +1,7 @@
 import db from '../../lib/db';
 
 export default async function ArtisansSection() {
-  const artisans = await getAllArtisans();
+  const artisans = await getFiveTopArtisans();
 
   // console.log('artisans', artisans);
 
@@ -41,7 +41,7 @@ const ArtisanCard = ({ name, description, imageUrl, profileLink }) => {
       <p className="text-sm mb-4">{description}</p>
       <a
         href={profileLink}
-        className=".absolute bottom-0  inline-block px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
+        className=".absolute bottom-0  inline-block px-4 py-2 bg-accent2-500 text-white rounded hover:bg-green-700"
       >
         View Profile
       </a>
@@ -49,12 +49,14 @@ const ArtisanCard = ({ name, description, imageUrl, profileLink }) => {
   );
 };
 
-async function getAllArtisans() {
+async function getFiveTopArtisans() {
   const query = `
     SELECT a.user_id, a.shop_description, u.name, u.user_image_url
     FROM public.artisans a
     JOIN public.users u
     ON u.user_id = a.user_id
+    ORDER BY total_sales DESC, rating DESC
+    LIMIT 5
   `;
 
   try {
