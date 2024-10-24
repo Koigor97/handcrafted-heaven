@@ -79,30 +79,30 @@ export default function FilterableProducts({ products, categories }) {
   };
 
   return (
-    <div className="flex flex-wrap md:flex-nowrap">
+    <div className="flex flex-wrap md:flex-nowrap max-w-custom-clamp2 mx-auto">
       <aside className="w-full md:w-64 p-4">
-    {/* For small screens, center the sidebar */}
-    <div className="flex justify-center items-center md:block">
-      <FilterSidebar
-        categories={categories}
-        selectedCategories={selectedCategories}
-        priceRange={priceRange}
-        setSelectedCategories={setSelectedCategories}
-        setPriceRange={setPriceRange}
-        onApply={handleApplyFilters}
-        onReset={resetFilters}
-        className="w-full md:w-64"
-      />
-    </div>
-  </aside>
+      {/* For small screens, center the sidebar */}
+      <div className="flex justify-center items-center md:block">
+        <FilterSidebar
+          categories={categories}
+          selectedCategories={selectedCategories}
+          priceRange={priceRange}
+          setSelectedCategories={setSelectedCategories}
+          setPriceRange={setPriceRange}
+          onApply={handleApplyFilters}
+          onReset={resetFilters}
+          className="w-full md:w-64"
+        />
+      </div>
+      </aside>
       <div className="flex-grow p-4 mx-auto max-w-6xl ">
-        
+
         <ProductGrid products={paginatedProducts} className="bg-red-100"/>
         {/* Pagination Component */}
-        <Pagination 
-          currentPage={currentPage} 
-          totalPages={totalPages} 
-          onPageChange={handlePageChange} 
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
         />
       </div>
     </div>

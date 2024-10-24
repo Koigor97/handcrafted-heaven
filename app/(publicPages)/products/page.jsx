@@ -21,16 +21,21 @@ export default async function ProductPage({searchParams}) {
 
     return (
       <div>
+        <div className='max-w-custom-clamp2 mx-auto'>
         <HeaderMenu searchParams={searchParams}/>
-        {/* <HeroMain />          */} 
+        </div>
+        {/* <HeroMain />          */}
         <div className=" bg-secondary text-center my-8 sm:text-center py-10">
+          <div className='max-w-custom-clamp2 mx-auto'>
+
           <h1 className="text-4xl font-extrabold text-white mb-2">Our Products</h1>
           <p className="text-lg text-white">Discover a carefully curated selection of high-quality products designed to meet your every need. Whether you&#39;re looking for the latest trends or timeless classics, we offer a wide variety of items at unbeatable prices. Explore our collection and find exactly what you&#39;re looking for—quality and style, all in one place.</p>
           <div className="mt-4 h-1 w-20 bg-green-600 mx-auto rounded"></div>
+          </div>
         </div>
             {/* <ProductGrid products={products} /> */}
-        <Suspense fallback={<div>Loading...</div>}>
-          <FilterableProducts products={products} categories={categories} />
+        <Suspense fallback={<div>Loading...</div> }>
+          <FilterableProducts products={products} categories={categories}/>
         </Suspense>
       </div>
     );
