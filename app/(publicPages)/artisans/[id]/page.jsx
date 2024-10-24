@@ -2,11 +2,7 @@ import { notFound } from 'next/navigation';
 import db from '../../../../lib/db';
 import React from 'react';
 
-export default async function ArtisanPage({
-  params,
-}: {
-  params: { id: string };
-}) {
+export default async function ArtisanPage({ params }) {
   const id = params.id; // Extracting id from params
   const artisans = await getArtisanInfo(id);
   const artisan = artisans[0];
