@@ -9,12 +9,12 @@
  * @param {string} [currency='USD'] - The currency code to format the price in (e.g., 'USD', 'EUR').
  * @returns {string} - The formatted price string, e.g., "$500.00".
  */
-export function formatPrice(price, currency = 'USD') {
+export function formatPrice(price, currency = "USD") {
   // Use Intl.NumberFormat to format the price to a specific currency
-  return new Intl.NumberFormat('en-US', {
-    style: 'currency',
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
     currency,
-    minimumFractionDigits: 2
+    minimumFractionDigits: 2,
   }).format(price);
 }
 
@@ -28,7 +28,7 @@ export function formatPrice(price, currency = 'USD') {
  */
 export function getLocalStorage(key) {
   // Check if the window object exists
-  if (typeof window !== 'undefined') {
+  if (typeof window !== "undefined") {
     // Get the value from local storage
     const storedValue = localStorage.getItem(key);
     // If the value exists, return it as a JSON object
@@ -74,7 +74,7 @@ export function addItemToLocalStorage(key, value) {
     // Set the new value in local storage
     setLocalStorage(key, currentValue);
   } else {
-    console.log('Item already exists in local storage');
+    console.log("Item already exists in local storage");
   }
 }
 
@@ -93,4 +93,30 @@ export function deleteItemFromLocalStorage(key, productId) {
     value = value.filter((item) => item.productId !== productId);
     setLocalStorage(key, value);
   }
+}
+
+// utils/findItemInLocalStorage.js
+
+/**
+ * Find the value of a given key in local storage.
+ *
+ * @param {string} key - The key of the value to find in local storage.
+ * @param {string} itemId - The ID of the item to find in local storage.
+ * @returns {Object} - The found value, or null if not found.
+ */
+export function findItemInLocalStorage(key, productId) {
+  // Get the value from local storage
+  const value = getLocalStorage(key);
+
+  // Find the item with the given ID in the array
+  const item = value.find((item) => item.productId === productId);
+
+  // Return the found item, or null if not found
+  return item || null;
+}
+
+// helper function for formatting dashboard date
+export function formatDashboardDate(date) {
+  const options = { year: "numeric", month: "long", day: "2-digit" };
+  return new Intl.DateTimeFormat("en-US", options).format(date);
 }

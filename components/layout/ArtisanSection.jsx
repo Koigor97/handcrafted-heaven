@@ -1,4 +1,5 @@
-import db from '../../lib/db';
+import db from "../../lib/db";
+// import Image from "next/image"; // Import the Image component
 
 export default async function ArtisansSection() {
   const artisans = await getFiveTopArtisans();
@@ -35,7 +36,7 @@ const ArtisanCard = ({ name, description, imageUrl, profileLink }) => {
       <img
         src={imageUrl}
         alt={`${name}`}
-        className="w-32 h-auto block mx-auto rounded-full  mb-4"
+        className="w-32 h-auto block mx-auto rounded-full mb-4 object-contain"
       />
       <h3 className="text-lg font-medium mb-2">{name}</h3>
       <p className="text-sm mb-4">{description}</p>
@@ -63,7 +64,7 @@ async function getFiveTopArtisans() {
     const result = await db.query(query);
     return result.rows;
   } catch (error) {
-    console.error('Error fetching products:', error);
+    console.error("Error fetching products:", error);
     throw error;
   }
 }

@@ -26,7 +26,7 @@
  * @requires ../lib/db
  */
 
-import db from '../lib/db';
+import db from "../lib/db";
 
 /**
  * Get all products from the database.
@@ -54,7 +54,29 @@ export async function getAllProducts() {
     const result = await db.query(query);
     return result.rows;
   } catch (error) {
-    console.error('Error fetching products:', error);
+    console.error("Error fetching products:", error);
+    throw error;
+  }
+}
+
+export async function getLimitedProductsForTesting() {
+  const query = `
+    SELECT
+      p.product_id,
+      p.name,
+      p.price,
+      p.image_url,
+      p.quantity_in_stock
+    FROM public.products p
+    LIMIT 5
+    
+  `;
+
+  try {
+    const result = await db.query(query);
+    return result.rows;
+  } catch (error) {
+    console.error("Error fetching products:", error);
     throw error;
   }
 }
@@ -116,14 +138,14 @@ export async function addProduct(product) {
     product.quantity_in_stock,
     product.image_url,
     product.artisan_id,
-    product.category_id
+    product.category_id,
   ];
 
   try {
     const result = await db.query(query, values);
     return result.rows[0];
   } catch (error) {
-    console.error('Error adding new product:', error);
+    console.error("Error adding new product:", error);
     throw error;
   }
 }
@@ -150,7 +172,7 @@ export async function updateProduct(productId, productData) {
     productData.image_url,
     productData.artisan_id,
     productData.category_id,
-    productId
+    productId,
   ];
 
   try {
@@ -187,7 +209,7 @@ export async function deleteProduct(productId) {
  * @returns {Promise<Array>} - A promise that resolves to an array of product objects.
  */
 export async function getFilteredProducts(searchQuery) {
-  const searchTerm = '%' + searchQuery + '%';
+  const searchTerm = "%" + searchQuery + "%";
   const query = ` SELECT
       p.product_id,
       p.name,
@@ -210,7 +232,82 @@ export async function getFilteredProducts(searchQuery) {
     const result = await db.query(query, [searchTerm]);
     return result.rows;
   } catch (error) {
-    console.error('Error fetching products:', error);
+    console.error("Error fetching products:", error);
     throw error;
   }
 }
+
+/**
+ * Get products based on featured column
+ * This function fetches products from the database based on the featured column if columns is True the values will be returned.
+ * @returns {Promise<Array>} - A promise that resolves to an array of product objects.
+ */
+export async function getFeaturedProducts() {
+  const query = `
+    SELECT
+    p.product_id,
+      p.name,
+      p.price,
+      p.quantity_in_stock,
+      p.image_url
+    FROM public.products p
+    WHERE p.featured
+  `;
+  try {
+    const result = await db.query(query);
+    return result.rows;
+  } catch (error) {
+    console.error("Error fetching featured products:", error);
+    throw error;
+  }
+}
+
+/**
+ * Get products based on the raiting of the product
+ * This function fetches products from the database based on the rating in the review table, if rating >= 4 the products will be returned.
+ * @returns {Promise<Array>} - A promise that resolves to an array of product objects.
+ */
+export async function getProductsByRating() {
+  const query = `
+    SELECT DISTINCT
+      p.product_id,
+      p.name,
+      p.price,
+      p.quantity_in_stock,
+      p.image_url
+    FROM public.products p
+    JOIN public.reviews r ON p.product_id = r.product_id
+    WHERE r.rating >= 4
+  `;
+  try {
+    const result = await db.query(query);
+    return result.rows;
+  } catch (error) {
+    console.error("Error fetching products by rating:", error);
+    throw error;
+  }
+}
+
+/**
+ * Get all categories with product count.
+ */
+export async function getCategories() {
+  const query = `
+    SELECT
+      c.name,
+      COUNT(p.product_id) AS count
+    FROM public.categories c
+    LEFT JOIN public.products p ON p.category_id = c.category_id
+    GROUP BY c.category_id
+    ORDER BY count DESC
+  `;
+
+  try {
+    const result = await db.query(query);
+    return result.rows;
+  } catch (error) {
+    console.error('Error fetching categories:', error);
+    throw error;
+  }
+}
+
