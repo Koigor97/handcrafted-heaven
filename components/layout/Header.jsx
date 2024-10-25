@@ -139,7 +139,7 @@ function Header() {
             </button>
 
             <div className="flex flex-col items-center space-y-4 mt-4">
-              <NavLinks className="text-sm sm:text-base md:text-lg" />
+              <NavLinks className="text-sm sm:text-base md:text-lg" setIsOpen={setIsOpen}/>
             </div>
 
             <div className="flex justify-center space-x-2 mb-4 mt-7">
@@ -155,8 +155,8 @@ function Header() {
                 <DropdownMenuContent className="w-45">
                   <DropdownMenuLabel>Choose account sign up</DropdownMenuLabel>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem>Sign up as user</DropdownMenuItem>
-                  <DropdownMenuItem>Sign up as Artisan</DropdownMenuItem>
+                  <DropdownMenuItem asChild><Link href="/auth/signup">User Sign up</Link></DropdownMenuItem>
+                  <DropdownMenuItem asChild><Link href="/auth/onboarding">Artisan Sign up</Link></DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
 
@@ -172,8 +172,8 @@ function Header() {
                 <DropdownMenuContent className="w-45">
                   <DropdownMenuLabel>Choose account Login</DropdownMenuLabel>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem>User Login</DropdownMenuItem>
-                  <DropdownMenuItem>Artisan Login</DropdownMenuItem>
+                  <DropdownMenuItem asChild><Link href="/auth/login">User Login</Link></DropdownMenuItem>
+                  <DropdownMenuItem asChild><Link href="/auth/login">Artisan Login</Link></DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>
