@@ -15,14 +15,14 @@ export const metadata = {
 
 export default async function ProductPage({searchParams}) {
   const query = searchParams?.query || '';
-  const categoriesQuery = searchParams?.categories || '';
-  const price = searchParams?.price || '';
+  const categoriesQuery = searchParams.categories ? searchParams.categories.split(',') : [];
+  const priceRange = searchParams.price ? searchParams.price.split('-').map(Number) : [null, null];
+  const [minPrice, maxPrice] = priceRange;
 
   // console.log(category, price)
   try {
     const categories = await getCategories(); // Fetch the categories
-    const products = await getProductsByFilter(query, categoriesQuery)
-
+    const products = await getProductsByFilter(query, categoriesQuery, minPrice, maxPrice)
 
     return (
       <div>

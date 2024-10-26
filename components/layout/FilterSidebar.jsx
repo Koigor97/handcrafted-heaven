@@ -1,80 +1,91 @@
 "use client";
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import Slider, { Range } from 'rc-slider';
 import 'rc-slider/assets/index.css'; // Import the slider styles
 import {
   Menubar,
   MenubarCheckboxItem,
   MenubarContent,
-  MenubarItem,
   MenubarMenu,
-  MenubarRadioGroup,
-  MenubarRadioItem,
-  MenubarSeparator,
-  MenubarShortcut,
-  MenubarSub,
-  MenubarSubContent,
-  MenubarSubTrigger,
   MenubarTrigger,
 } from "@/components/ui/menubar"
 import { ChevronDown } from 'lucide-react';
 import SearchBar from '../common/SearchBar';
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 import { useDebouncedCallback } from 'use-debounce';
-import Link from 'next/link';
 import { useState } from 'react';
 
-function FilterSidebar({ categories, selectedCategories, priceRange, setSelectedCategories, setPriceRange, onApply, onReset }) {
-  const handleCategoryChange = (category) => {
-    setSelectedCategories((prev) =>
-      prev.includes(category)
-        ? prev.filter((c) => c !== category)
-        : [...prev, category]
-    );
-  };
+function FilterSidebar({ categories}) {
+  // const handleCategoryChange = (category) => {
+  //   setSelectedCategories((prev) =>
+  //     prev.includes(category)
+  //       ? prev.filter((c) => c !== category)
+  //       : [...prev, category]
+  //   );
+  // };
 
-  const handlePriceChange = (value) => {
-    setPriceRange(value); // value is an array with [min, max]
-  };
+  // const handlePriceChange = (value) => {
+  //   setPriceRange(value); // value is an array with [min, max]
+  // };
 
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const { replace } = useRouter();
+  const [categoriesSelected, setCategoriesSelected] = useState([]);
+  const [localPriceRange, setLocalPriceRange] = useState([0, 1000]);
+
+  useEffect(() => {
+    const currentCategories = searchParams.get('categories');
+    const categoriesArray = currentCategories ? currentCategories.split(',') : [];
+    setCategoriesSelected(categoriesArray);
+  }, [searchParams])
 
   const handleClickCategory = useDebouncedCallback((category) => {
     const params = new URLSearchParams(searchParams);
-    const currentCategories = params.getAll('categories'); // Obtiene todas las categorías actuales
+    const index = categoriesSelected.indexOf(category);
 
-    // Si la categoría ya está seleccionada, la eliminamos
-    if (currentCategories.includes(category)) {
-      // Filtrar las categorías para eliminar la categoría seleccionada
-      const updatedCategories = currentCategories.filter(cat => cat !== category);
-
-      // Si no hay más categorías, eliminamos el parámetro
-      if (updatedCategories.length === 0) {
-        params.delete('categories');
-      } else {
-        // Si quedan categorías, actualizamos la URL
-        params.delete('categories'); // Primero borramos todos
-        updatedCategories.forEach(cat => params.append('categories', cat)); // Luego agregamos las restantes
-      }
+    if (index !== -1) {
+      categoriesSelected.splice(index, 1);
     } else {
-      // Si no está seleccionada, la añadimos
-      params.append('categories', category);
+      categoriesSelected.push(category);
     }
 
-    // Actualizar la URL
+    if(categoriesSelected.length === 0) {
+      params.delete('categories');
+    } else {
+      params.set('categories', categoriesSelected.join(','));
+    }
+
+    // Actualizamos la URL
     replace(`${pathname}?${params.toString()}`);
-  });
+  }, 400);
 
+  const handlePriceChange = (value) => {
+    setLocalPriceRange(value); // Actualiza el estado local inmediatamente
+    // Llama a la función debounced solo para actualizar la URL
+    debouncedUpdatePrice(value);
+  };
 
+// Define la función debounced que actualiza la URL
+  const debouncedUpdatePrice = useDebouncedCallback((value) => {
+    const params = new URLSearchParams(searchParams);
+
+    if (value[0] === 0 && value[1] === 1000) {
+      params.delete('price'); // Elimina el parámetro de precio si es el valor por defecto
+    } else {
+      params.set('price', `${value[0]}-${value[1]}`);
+    }
+    replace(`${pathname}?${params.toString()}`);
+  }, 400);
 
   return (
     <div className="p-4 md:px-2 md:py-8">
-
+      <div className='mb-6'>
+          <h4 className='text-sm md:text-base md:font-bold mb-2'>Filter By Name</h4>
+          <SearchBar/>
+        </div>
       <aside className="hidden w-full md:flex md:flex-col md:w-64">
-        <SearchBar/>
 
         {/* Filter by Category */}
         <div className="mb-6">
@@ -86,7 +97,7 @@ function FilterSidebar({ categories, selectedCategories, priceRange, setSelected
                   type="checkbox"
                   className="mr-2"
                   onChange={() => handleClickCategory(category.name)}
-                  checked={searchParams.getAll('categories').includes(category)}
+                  checked={categoriesSelected.includes(category.name)}
                 />
                 <span>
                   {category.name} ({category.count})
@@ -100,15 +111,15 @@ function FilterSidebar({ categories, selectedCategories, priceRange, setSelected
         <div className="mb-6">
           <h4 className="font-bold mb-2">Filter by Price</h4>
           <div className="flex items-center justify-between mb-2">
-            <span>Min: ${priceRange[0]}</span>
-            <span>Max: ${priceRange[1]}</span>
+            <span>Min: ${localPriceRange[0]}</span>
+            <span>Max: ${localPriceRange[1]}</span>
           </div>
 
           {/* Dual-Handle Range Slider */}
           <Slider range
             min={0}
             max={1000} // Adjust max as needed
-            value={priceRange}
+            value={localPriceRange}
             onChange={handlePriceChange}
             allowCross={false} // Prevent handles from crossing each other
             className="w-full"
@@ -138,8 +149,8 @@ function FilterSidebar({ categories, selectedCategories, priceRange, setSelected
                 <MenubarCheckboxItem
                 key={category.name}
                 value={category.name}
-                onClick={() => handleCategoryChange(category.name)}
-                checked={selectedCategories.includes(category.name)}
+                onClick={() => handleClickCategory(category.name)}
+                checked={categoriesSelected.includes(category.name)}
                 >
                   {category.name} ({category.count})
                 </MenubarCheckboxItem>
@@ -154,15 +165,15 @@ function FilterSidebar({ categories, selectedCategories, priceRange, setSelected
           <MenubarContent className="bg-primary px-4">
             <div className="mb-6">
               <div className="flex items-center justify-between mb-2">
-                <span>Min: ${priceRange[0]}</span>
-                <span>Max: ${priceRange[1]}</span>
+                <span>Min: ${localPriceRange[0]}</span>
+                <span>Max: ${localPriceRange[1]}</span>
               </div>
 
               {/* Dual-Handle Range Slider */}
               <Slider range
                 min={0}
                 max={1000} // Adjust max as needed
-                value={priceRange}
+                value={localPriceRange}
                 onChange={handlePriceChange}
                 allowCross={false} // Prevent handles from crossing each other
                 className="w-full"
@@ -184,22 +195,22 @@ function FilterSidebar({ categories, selectedCategories, priceRange, setSelected
       </Menubar>
 
       {/* Apply Filters Button */}
-        <div className="flex space-x-2">
+        {/* <div className="flex space-x-2">
           <button
             onClick={onApply}
             className="w-full md:w-1/2 text-foreground border-2 border-foreground py-2 rounded-md hover:bg-foreground hover:text-text-50 transition"
           >
             Apply Filters
-          </button>
+          </button> */}
 
           {/* Reset Filters Button */}
-          <button
+          {/* <button
             onClick={onReset}
             className="w-full md:w-1/2 bg-foreground border-2 border-foreground text-text-50 py-2 rounded-md hover:bg-transparent hover:text-foreground transition"
           >
             Reset Filters
           </button>
-        </div>
+        </div> */}
     </div>
   );
 }
