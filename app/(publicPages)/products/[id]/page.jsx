@@ -1,8 +1,10 @@
 // app/products/[id].jsx
+import Header from '@/components/layout/Header';
+import HeaderMenu from '@/components/layout/HeaderMenu';
 import { getProductById } from '@/services/productService';
 import Image from 'next/image';
 
-export default async function ProductDetails({ params }) {
+export default async function ProductDetails({ params, searchParams }) {
   const { id } = params; // Accessing the dynamic route parameter 'id'
 
   // Fetch product by ID
@@ -14,7 +16,9 @@ export default async function ProductDetails({ params }) {
   }
 
   return (
-    <div className="max-w-7xl mx-auto p-8">
+    <div className="max-w-custom-clamp2 mx-auto">
+    <HeaderMenu searchParams={searchParams}/>
+    <div className="mx-auto p-8">
       {/* Product Hero Section */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-10 mb-8">
         {/* Product Image */}
@@ -40,7 +44,7 @@ export default async function ProductDetails({ params }) {
             <h1 className="text-5xl font-extrabold mb-4">{product.name}</h1>
             <p className="text-3xl text-green-600 mb-4">${Number(product.price || 0).toFixed(2)}</p>
             <p className="text-lg text-gray-600 mb-6">{product.description}</p>
-            
+
             {/* Horizontal Divider */}
             <div className="h-1 w-20 bg-green-600 my-6 rounded"></div>
 
@@ -70,6 +74,7 @@ export default async function ProductDetails({ params }) {
           {/* You can add more details here, like reviews or related products */}
         </div>
       </div>
+    </div>
     </div>
   );
 }

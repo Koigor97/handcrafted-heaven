@@ -17,7 +17,7 @@ export default async function ArtisansSection() {
       <div className="flex flex-wrap justify-around gap-6">
         {artisans.map((artisan) => (
           <ArtisanCard
-            key={artisan.user_id}
+            key={artisan.artisan_id}
             name={artisan.name}
             description={artisan.shop_description}
             imageUrl={artisan.user_image_url}
