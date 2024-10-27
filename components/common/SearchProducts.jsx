@@ -28,7 +28,7 @@ async function SearchResultList({query}) {
         {
           products.map((product) => (
             <li key={product.product_id}>
-              <Link href={`/product/${product.product_id}`} className='flex flex-row gap-4 items-center text-xs hover:bg-background p-3 rounded'>
+              <Link href={`/products/${product.product_id}`} className='flex flex-row gap-4 items-center text-xs hover:bg-background p-3 rounded'>
                 <Image
                   src={product.image_url}
                   alt={product.name}

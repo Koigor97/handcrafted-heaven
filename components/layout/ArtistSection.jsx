@@ -1,10 +1,9 @@
-import db from "../../lib/db";
-// import Image from "next/image"; // Import the Image component
+import db from '../../lib/db';
+import { notFound } from 'next/navigation';
+import React from 'react';
 
 export default async function ArtisansSection() {
-  const artisans = await getAllArtisans();
-
-  // console.log('artisans', artisans);
+  const artisans = await getFiveTopArtisans();
 
   return (
     <section className="text-center py-12">
@@ -18,11 +17,11 @@ export default async function ArtisansSection() {
       <div className="flex flex-wrap justify-around gap-6">
         {artisans.map((artisan) => (
           <ArtisanCard
-            key={artisan.user_id}
+            key={artisan.artisan_id}
             name={artisan.name}
             description={artisan.shop_description}
             imageUrl={artisan.user_image_url}
-            profileLink={artisan.profileLink}
+            profileLink={`/artisans/${artisan.artisan_id}`}
           />
         ))}
       </div>
@@ -42,7 +41,7 @@ const ArtisanCard = ({ name, description, imageUrl, profileLink }) => {
       <p className="text-sm mb-4">{description}</p>
       <a
         href={profileLink}
-        className=".absolute bottom-0  inline-block px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
+        className=".absolute bottom-0  inline-block px-4 py-2 bg-accent2-500 text-white rounded hover:bg-green-700"
       >
         View Profile
       </a>
@@ -50,19 +49,21 @@ const ArtisanCard = ({ name, description, imageUrl, profileLink }) => {
   );
 };
 
-async function getAllArtisans() {
+async function getFiveTopArtisans() {
   const query = `
-    SELECT a.user_id, a.shop_description, u.name, u.user_image_url
+    SELECT a.artisan_id, a.shop_description, u.name, u.user_image_url
     FROM public.artisans a
     JOIN public.users u
     ON u.user_id = a.user_id
-  `;
+    ORDER BY total_sales DESC, rating DESC
+    LIMIT 5
+`;
 
   try {
     const result = await db.query(query);
     return result.rows;
   } catch (error) {
-    console.error("Error fetching products:", error);
+    console.error('Error fetching products:', error);
     throw error;
   }
 }
