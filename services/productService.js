@@ -26,7 +26,7 @@
  * @requires ../lib/db
  */
 
-import db from "../lib/db";
+import db from '../lib/db';
 
 /**
  * Get all products from the database.
@@ -54,7 +54,7 @@ export async function getAllProducts() {
     const result = await db.query(query);
     return result.rows;
   } catch (error) {
-    console.error("Error fetching products:", error);
+    console.error('Error fetching products:', error);
     throw error;
   }
 }
@@ -69,14 +69,14 @@ export async function getLimitedProductsForTesting() {
       p.quantity_in_stock
     FROM public.products p
     LIMIT 5
-    
+
   `;
 
   try {
     const result = await db.query(query);
     return result.rows;
   } catch (error) {
-    console.error("Error fetching products:", error);
+    console.error('Error fetching products:', error);
     throw error;
   }
 }
@@ -138,14 +138,14 @@ export async function addProduct(product) {
     product.quantity_in_stock,
     product.image_url,
     product.artisan_id,
-    product.category_id,
+    product.category_id
   ];
 
   try {
     const result = await db.query(query, values);
     return result.rows[0];
   } catch (error) {
-    console.error("Error adding new product:", error);
+    console.error('Error adding new product:', error);
     throw error;
   }
 }
@@ -172,7 +172,7 @@ export async function updateProduct(productId, productData) {
     productData.image_url,
     productData.artisan_id,
     productData.category_id,
-    productId,
+    productId
   ];
 
   try {
@@ -209,7 +209,7 @@ export async function deleteProduct(productId) {
  * @returns {Promise<Array>} - A promise that resolves to an array of product objects.
  */
 export async function getFilteredProducts(searchQuery) {
-  const searchTerm = "%" + searchQuery + "%";
+  const searchTerm = '%' + searchQuery + '%';
   const query = ` SELECT
       p.product_id,
       p.name,
@@ -232,7 +232,7 @@ export async function getFilteredProducts(searchQuery) {
     const result = await db.query(query, [searchTerm]);
     return result.rows;
   } catch (error) {
-    console.error("Error fetching products:", error);
+    console.error('Error fetching products:', error);
     throw error;
   }
 }
@@ -257,7 +257,7 @@ export async function getFeaturedProducts() {
     const result = await db.query(query);
     return result.rows;
   } catch (error) {
-    console.error("Error fetching featured products:", error);
+    console.error('Error fetching featured products:', error);
     throw error;
   }
 }
@@ -283,7 +283,7 @@ export async function getProductsByRating() {
     const result = await db.query(query);
     return result.rows;
   } catch (error) {
-    console.error("Error fetching products by rating:", error);
+    console.error('Error fetching products by rating:', error);
     throw error;
   }
 }
@@ -311,3 +311,79 @@ export async function getCategories() {
   }
 }
 
+/**
+ * Get products based on name, category and price
+ * This function fetches products from the database based on the name, category and price, the values will be returned, even if one of the values is empty, and the pagination is also returned.
+ * @returns {Promise<Array>} - A promise that resolves to an array of product objects and the total pages.
+ */
+export async function getProductsByFilter(
+  nameInput,
+  categories,
+  minPrice,
+  maxPrice,
+  currentPage,
+  itemsPerPage
+) {
+  const offset = (currentPage - 1) * itemsPerPage;
+  let baseQuery = `
+    FROM public.products p
+    JOIN public.categories c ON p.category_id = c.category_id
+  `;
+
+  const filters = [];
+  const values = [];
+  const categoryArray = Array.isArray(categories) ? categories : [categories];
+
+  // Agregar filtros según estén disponibles
+  if (nameInput) {
+    filters.push(`p.name ILIKE $${filters.length + 1}`);
+    values.push(`${nameInput}%`);
+  }
+
+  if (categoryArray.length > 0) {
+    filters.push(`c.name = ANY($${filters.length + 1}::text[])`);
+    values.push(categoryArray);
+  }
+
+  if (minPrice) {
+    filters.push(`p.price >= $${filters.length + 1}`);
+    values.push(minPrice);
+  }
+
+  if (maxPrice) {
+    filters.push(`p.price <= $${filters.length + 1}`);
+    values.push(maxPrice);
+  }
+
+  const whereClause =
+    filters.length > 0 ? `WHERE ${filters.join(' AND ')}` : '';
+
+  const countQuery = `SELECT COUNT(*) ${baseQuery} ${whereClause}`;
+
+  const productQuery = `
+    SELECT
+      p.product_id,
+      p.name,
+      p.description,
+      p.price,
+      p.quantity_in_stock,
+      p.image_url,
+      p.category_id,
+      c.name AS category_name
+    ${baseQuery}
+    ${whereClause}
+    LIMIT ${itemsPerPage} OFFSET ${offset}
+  `;
+
+  try {
+    const countResult = await db.query(countQuery, values);
+    const totalPages = Math.ceil(
+      Number(countResult.rows[0].count) / itemsPerPage
+    );
+    const { rows: products } = await db.query(productQuery, values);
+    return { products, totalPages };
+  } catch (error) {
+    console.error('Error fetching products by filter:', error);
+    throw error;
+  }
+}

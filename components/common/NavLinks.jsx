@@ -4,7 +4,6 @@ import React from 'react';
 import { usePathname } from 'next/navigation';
 
 const NavLinks = ({setIsOpen}) => {
-  console.log('setIsOpen:', setIsOpen);
   const pathName = usePathname();
 
   const handleLinkClick = () => {
@@ -14,7 +13,7 @@ const NavLinks = ({setIsOpen}) => {
     } else {
       console.error('setIsOpen is not a function', setIsOpen);
     }
-    
+
   };
 
   return (
