@@ -313,25 +313,19 @@ export async function getCategories() {
 
 /**
  * Get products based on name, category and price
- * This function fetches products from the database based on the name, category and price, the values will be returned, even if one of the values is empty.
- * @returns {Promise<Array>} - A promise that resolves to an array of product objects.
+ * This function fetches products from the database based on the name, category and price, the values will be returned, even if one of the values is empty, and the pagination is also returned.
+ * @returns {Promise<Array>} - A promise that resolves to an array of product objects and the total pages.
  */
 export async function getProductsByFilter(
   nameInput,
   categories,
   minPrice,
-  maxPrice
+  maxPrice,
+  currentPage,
+  itemsPerPage
 ) {
-  let query = `
-    SELECT
-      p.product_id,
-      p.name,
-      p.description,
-      p.price,
-      p.quantity_in_stock,
-      p.image_url,
-      p.category_id,
-      c.name AS category_name
+  const offset = (currentPage - 1) * itemsPerPage;
+  let baseQuery = `
     FROM public.products p
     JOIN public.categories c ON p.category_id = c.category_id
   `;
@@ -361,14 +355,33 @@ export async function getProductsByFilter(
     values.push(maxPrice);
   }
 
-  // Añadir cláusula WHERE solo si hay filtros
-  if (filters.length > 0) {
-    query += ` WHERE ${filters.join(' AND ')}`;
-  }
+  const whereClause =
+    filters.length > 0 ? `WHERE ${filters.join(' AND ')}` : '';
+
+  const countQuery = `SELECT COUNT(*) ${baseQuery} ${whereClause}`;
+
+  const productQuery = `
+    SELECT
+      p.product_id,
+      p.name,
+      p.description,
+      p.price,
+      p.quantity_in_stock,
+      p.image_url,
+      p.category_id,
+      c.name AS category_name
+    ${baseQuery}
+    ${whereClause}
+    LIMIT ${itemsPerPage} OFFSET ${offset}
+  `;
 
   try {
-    const { rows } = await db.query(query, values);
-    return rows;
+    const countResult = await db.query(countQuery, values);
+    const totalPages = Math.ceil(
+      Number(countResult.rows[0].count) / itemsPerPage
+    );
+    const { rows: products } = await db.query(productQuery, values);
+    return { products, totalPages };
   } catch (error) {
     console.error('Error fetching products by filter:', error);
     throw error;

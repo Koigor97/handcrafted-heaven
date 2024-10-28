@@ -16,19 +16,7 @@ import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 import { useDebouncedCallback } from 'use-debounce';
 import { useState } from 'react';
 
-function FilterSidebar({ categories}) {
-  // const handleCategoryChange = (category) => {
-  //   setSelectedCategories((prev) =>
-  //     prev.includes(category)
-  //       ? prev.filter((c) => c !== category)
-  //       : [...prev, category]
-  //   );
-  // };
-
-  // const handlePriceChange = (value) => {
-  //   setPriceRange(value); // value is an array with [min, max]
-  // };
-
+function FilterSidebar({ categories }) {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const { replace } = useRouter();
@@ -80,7 +68,7 @@ function FilterSidebar({ categories}) {
   }, 400);
 
   return (
-    <div className="p-4 md:px-2 md:py-8">
+    <div className="p-4 md:px-2">
       <div className='mb-6'>
           <h4 className='text-sm md:text-base md:font-bold mb-2'>Filter By Name</h4>
           <SearchBar/>
@@ -138,7 +126,7 @@ function FilterSidebar({ categories}) {
         </div>
       </aside>
 
-      <Menubar className="flex md:hidden my-3">
+      <Menubar className="h-max md:hidden my-3">
         <MenubarMenu>
           <MenubarTrigger className="px-1.5">
             Filter by Category <ChevronDown className='stroke-1'/>
@@ -165,8 +153,8 @@ function FilterSidebar({ categories}) {
           <MenubarContent className="bg-primary px-4">
             <div className="mb-6">
               <div className="flex items-center justify-between mb-2">
-                <span>Min: ${localPriceRange[0]}</span>
-                <span>Max: ${localPriceRange[1]}</span>
+                <span className='text-sm md:text-base'>Min:${localPriceRange[0]}</span>
+                <span className='text-sm md:text-base'>Max:${localPriceRange[1]}</span>
               </div>
 
               {/* Dual-Handle Range Slider */}
@@ -193,24 +181,6 @@ function FilterSidebar({ categories}) {
           </MenubarContent>
         </MenubarMenu>
       </Menubar>
-
-      {/* Apply Filters Button */}
-        {/* <div className="flex space-x-2">
-          <button
-            onClick={onApply}
-            className="w-full md:w-1/2 text-foreground border-2 border-foreground py-2 rounded-md hover:bg-foreground hover:text-text-50 transition"
-          >
-            Apply Filters
-          </button> */}
-
-          {/* Reset Filters Button */}
-          {/* <button
-            onClick={onReset}
-            className="w-full md:w-1/2 bg-foreground border-2 border-foreground text-text-50 py-2 rounded-md hover:bg-transparent hover:text-foreground transition"
-          >
-            Reset Filters
-          </button>
-        </div> */}
     </div>
   );
 }

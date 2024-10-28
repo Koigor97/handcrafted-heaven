@@ -18,11 +18,14 @@ export default async function ProductPage({searchParams}) {
   const categoriesQuery = searchParams.categories ? searchParams.categories.split(',') : [];
   const priceRange = searchParams.price ? searchParams.price.split('-').map(Number) : [null, null];
   const [minPrice, maxPrice] = priceRange;
+  const currentPage = Number(searchParams.page) || 1;
+  const itemsPerPage = 7;
 
   // console.log(category, price)
   try {
     const categories = await getCategories(); // Fetch the categories
-    const products = await getProductsByFilter(query, categoriesQuery, minPrice, maxPrice)
+    const {products, totalPages} = await getProductsByFilter(query, categoriesQuery, minPrice, maxPrice, currentPage, itemsPerPage)
+    const showArrows = totalPages > 1
 
     return (
       <div>
@@ -40,7 +43,7 @@ export default async function ProductPage({searchParams}) {
         </div>
             {/* <ProductGrid products={products} /> */}
         <Suspense fallback={<div>Loading...</div> }>
-          <FilterableProducts products={products} categories={categories}/>
+          <FilterableProducts products={products} categories={categories} totalPages={totalPages} showArrows={showArrows}/>
         </Suspense>
       </div>
     );
