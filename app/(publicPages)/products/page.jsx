@@ -1,12 +1,9 @@
 // app/products/page.jsx
 // import ProductGrid from '@/components/layout/ProductGrid';
 import { Suspense } from 'react';
-import HeaderMenu from '@/components/layout/HeaderMenu';
-import HeroMain from '@/components/layout/HeroMain';
 import FilterableProducts from '@/components/common/FilterableProducts';
-import { getAllProducts, getCategories, getProductsByFilter } from '@/services/productService';
+import { getCategories, getProductsByFilter } from '@/services/productService';
 import ToolBar from '@/components/common/ToolBar';
-import { getFilteredProducts } from '@/services/productService';
 
 export const metadata = {
   title: "Product Page",

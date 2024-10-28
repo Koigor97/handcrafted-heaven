@@ -1,7 +1,3 @@
-"use client"; // Make this a Client Component
-
-import { useState, useEffect } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
 import FilterSidebar from '../layout/FilterSidebar';
 import ProductGrid from '../layout/ProductGrid';
 import Pagination from '../layout/Pagination'; // Import the Pagination component
