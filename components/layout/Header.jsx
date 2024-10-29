@@ -60,9 +60,9 @@ function Header() {
 
       <div className=" bg-primary ">
         <div className="flex justify-between items-center py-4 px-4 max-w-custom-clamp2 mx-auto">
-          <div className="flex items-center gap-4 px-0">
-            <Logo className="w-10 h-auto md:w-16" />
-            <span className="text-sm md:text-lg font-bold text-gray-700 whitespace-nowrap">
+          <div className="flex items-center gap-4 ml-0">
+            <Logo className="w-10 h-auto md:w-16 px-2" />
+            <span className="text-sm md:text-lg font-bold text-gray-700 whitespace-nowrap ml-0">
               Handcrafted Haven
             </span>
           </div>
@@ -81,13 +81,13 @@ function Header() {
             <NavLinks />
           </div>
 
-          <div className="hidden sm:flex space-x-2 justify-end">
+          <div className="hidden sm:flex space-x-2 justify-end mr-0">
             <DropdownMenu open={isSignUpOpen} onOpenChange={setIsSignUpOpen}>
               <DropdownMenuTrigger asChild>
                 <Button
                   variant={activeButton === "signup" ? "outline" : "default"}
                   onClick={handleSignUpClick}
-                  className="px-4 py-2 text-xs sm:text-sm md:text-base border border-accent2-500 whitespace-nowrap"
+                  className="px-2 py-2 text-xs sm:text-sm md:text-base border border-accent2-500 whitespace-nowrap"
                 >
                   Sign Up
                 </Button>
@@ -109,7 +109,7 @@ function Header() {
                 <Button
                   variant={activeButton === "login" ? "outline" : "default"}
                   onClick={handleLoginClick}
-                  className="px-4 py-2 text-xs sm:text-sm md:text-base border border-accent2-500 whitespace-nowrap"
+                  className="px-2 py-1 text-xs sm:text-sm md:text-base border border-accent2-500 whitespace-nowrap"
                 >
                   Login
                 </Button>
@@ -130,7 +130,7 @@ function Header() {
             isOpen ? "translate-x-0" : "translate-x-full"
           } sm:hidden`}
         >
-          <div className="flex flex-col p-4">
+          <div className="flex flex-col p-4 ">
             <button onClick={toggleMenu} className="self-end">
               <XIcon className="h-10 w-10 text-gray-800" />
             </button>
