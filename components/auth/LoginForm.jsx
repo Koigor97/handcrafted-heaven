@@ -11,7 +11,9 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import LoginUsersButton from "../ui/loginUsersButton";
 import { signIn } from 'next-auth/react';
+
 
 export default function LoginForm({ errors }) {
   return (
@@ -49,9 +51,8 @@ export default function LoginForm({ errors }) {
               <p className="text-sm text-red-500">{errors.password}</p>
             )}
           </div>
-          <Button type="submit" className="w-full">
-            Login
-          </Button>
+
+          <LoginUsersButton />
           <Button variant="outline" className="w-full" type="button" onClick={() => signIn("google")}>
             Login with Google
           </Button>

@@ -1,6 +1,8 @@
+
 import db from '../../lib/db';
 import { notFound } from 'next/navigation';
 import React from 'react';
+
 
 export default async function ArtisansSection() {
   const artisans = await getFiveTopArtisans();

@@ -26,6 +26,8 @@ const initialState = {
   currentStep: 1,
 };
 
+// {type: "SET_USER_INFO", payload:{id:}}
+
 // Reducer function
 function onboardingReducer(state, action) {
   switch (action.type) {
