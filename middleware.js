@@ -7,8 +7,21 @@ export default async function middleware(request) {
 
   const verifiedToken = token && (await verifyToken(token));
 
+  const protectedRoutes = [
+    '/cart',
+    '/orders',
+    '/profile',
+    '/checkout',
+    '/dashboard'
+  ];
+
   if (!verifiedToken) {
-    return NextResponse.redirect(new URL('/auth/login', request.url));
+    const response = NextResponse.next();
+    response.cookies.delete('token');
+
+    if (protectedRoutes.includes(request.nextUrl.pathname)) {
+      return NextResponse.redirect(new URL('/auth/login', request.url));
+    }
   }
 
   if (request.nextUrl.pathname === '/dashboard') {
@@ -23,5 +36,5 @@ export default async function middleware(request) {
 }
 
 export const config = {
-  matcher: ['/dashboard', '/cart', '/orders', '/profile', '/checkout']
+  matcher: ['/', '/dashboard', '/cart', '/orders', '/profile', '/checkout']
 };
