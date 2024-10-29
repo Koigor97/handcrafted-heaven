@@ -15,7 +15,7 @@ function Product({ id, image, name, price, quantity }) {
       setIsWishlisted(false);
       window.dispatchEvent(new Event('wishlistUpdated'));
     } else {
-      addItemToLocalStorage('wishlist', {productId: id, name, imageUrl: image});
+      addItemToLocalStorage('wishlist', {productId: id, name, imageUrl: image, price});
       setIsWishlisted(!isWishlisted)
       window.dispatchEvent(new Event('wishlistUpdated'))
     }

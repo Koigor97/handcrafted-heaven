@@ -70,7 +70,7 @@ export function addItemToLocalStorage(key, value) {
   );
   if (!existingItem) {
     // Add the new value to the array
-    currentValue.push(value);
+    currentValue.push({ ...value, quantity: 1 });
     // Set the new value in local storage
     setLocalStorage(key, currentValue);
   } else {
@@ -119,4 +119,28 @@ export function findItemInLocalStorage(key, productId) {
 export function formatDashboardDate(date) {
   const options = { year: "numeric", month: "long", day: "2-digit" };
   return new Intl.DateTimeFormat("en-US", options).format(date);
+}
+
+/**
+ * Update an existing value in local storage.
+ *
+ * @param {string} key - The key of the value to update in local storage.
+ * @param {string} productId - The ID of the item to update.
+ * @param {Object} newValue - The new values to update the item with.
+ */
+export function updateItemInLocalStorage(key, productId, newValue) {
+  // Get the current value from local storage
+  let currentValue = getLocalStorage(key);
+
+  // Find the index of the item to update
+  const index = currentValue.findIndex(item => item.productId === productId);
+
+  // If the item exists, update its properties
+  if (index !== -1) {
+    currentValue[index] = { ...currentValue[index], ...newValue };
+    // Set the updated value back in local storage
+    setLocalStorage(key, currentValue);
+  } else {
+    console.log("Item not found in local storage");
+  }
 }
