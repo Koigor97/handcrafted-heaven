@@ -22,6 +22,8 @@ export default async function middleware(request) {
     if (protectedRoutes.includes(request.nextUrl.pathname)) {
       return NextResponse.redirect(new URL('/auth/login', request.url));
     }
+
+    return response;
   }
 
   if (request.nextUrl.pathname === '/dashboard') {
