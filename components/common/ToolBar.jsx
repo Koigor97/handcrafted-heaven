@@ -6,7 +6,7 @@ import {Popover, PopoverTrigger, PopoverContent} from "@/components/ui/popover";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger, DropdownMenuSeparator } from '@/components/ui/dropdown-menu';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { getLocalStorage, deleteItemFromLocalStorage } from '@/utils/helper';
+import { getLocalStorage, deleteItemFromLocalStorage, addItemToLocalStorage } from '@/utils/helper';
 import {useEffect, useState} from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
@@ -105,12 +105,33 @@ function WishlistPopover() {
         window.dispatchEvent(new Event('deletedFromWishlist'));
     }
 
+    const handleAddToCart = (item) => {
+        
+        addItemToLocalStorage('cart', item);
+        deleteItemFromLocalStorage('wishlist', item.productId);
+        setWishlistItems(getLocalStorage('wishlist')); // Update wishlist state
+
+        // Dispatch events to update both cart and wishlist
+        window.dispatchEvent(new Event('cartUpdated'));
+        window.dispatchEvent(new Event('wishlistUpdated'));
+        window.dispatchEvent(new Event('deletedFromWishlist'));
+    };
+
     return (
         <Popover>
             <PopoverTrigger asChild>
-                <Button className="h-10 w-10 flex items-center justify-center rounded-full bg-primary p-0"><Heart className="fill-current"/></Button>
+            <div className="relative">
+                    <Button className="h-10 w-10 flex items-center justify-center rounded-full bg-primary p-0">
+                        <Heart className="fill-current" />
+                    </Button>
+                    {wishlistItems.length > 0 && (
+                        <span className="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 bg-red-500 text-white text-xs h-5 w-5 flex items-center justify-center rounded-full">
+                            {wishlistItems.length}
+                        </span>
+                    )}
+                </div>
             </PopoverTrigger>
-            <PopoverContent className="w-80 bg-primary border-none">
+            <PopoverContent className="w-100 bg-primary border-none">
                 {
                     wishlistItems.length > 0 ? (
                         <ul className="flex flex-col gap-3">
@@ -125,9 +146,16 @@ function WishlistPopover() {
                                             className="object-cover rounded-sm"
                                         />
                                         <span className="w-full line-clamp-1">{item.name}</span>
-                                        <Button className="border-2 border-foreground px-2 focus:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0" onClick={() => handleDeleteItem(item.productId)}>
-                                            <X/>
-                                        </Button>
+                                <div className="flex gap-2">
+                                    {/* Delete button */}
+                                    <Button className="border-2 border-foreground px-2 focus:outline-none" onClick={() => handleDeleteItem(item.productId)}>
+                                        <X />
+                                    </Button>
+                                    {/* Add to Cart button */}
+                                    <Button className="border-2 border-foreground px-2 focus:outline-none" onClick={() => handleAddToCart(item)}>
+                                        Add to Cart
+                                    </Button>
+                                </div>
                                     </li>
                                 ))
                             }
@@ -139,15 +167,40 @@ function WishlistPopover() {
 }
 
 function CartIconLink() {
+    const [cartItems, setCartItems] = useState(getLocalStorage('cart') || []);
+
+    console.log('cartItems:', cartItems);
+
+    // Function to handle updates from local storage
+    const handleStorageUpdate = () => {
+        const updatedCart = getLocalStorage('cart');
+        setCartItems(updatedCart);
+    };
+
+    // Set up event listeners for cart updates
+    useEffect(() => {
+        window.addEventListener('cartUpdated', handleStorageUpdate);
+        return () => {
+            window.removeEventListener('cartUpdated', handleStorageUpdate);
+        };
+    }, []);
     return (
         <TooltipProvider>
                 <Tooltip>
                     <TooltipTrigger asChild>
-                        <Link href="/cart">
-                            <div className="h-10 w-10 flex items-center justify-center rounded-full bg-primary hover:cursor-pointer">
-                                <ShoppingCart/>
-                            </div>
-                        </Link>
+                    <div className="relative">
+                    <Link href="/cart">
+                        <div className="h-10 w-10 flex items-center justify-center rounded-full bg-primary hover:cursor-pointer">
+                            <ShoppingCart />
+                        </div>
+                    </Link>
+                    {cartItems.length > 0 && (
+                        <span className="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 bg-red-500 text-white text-xs h-5 w-5 flex items-center justify-center rounded-full">
+                            {cartItems.length}
+                        </span>
+                    )}
+                </div>
+                    
                     </TooltipTrigger>
                     <TooltipContent className="bg-background border-none"><p>Go to cart</p></TooltipContent>
                 </Tooltip>
