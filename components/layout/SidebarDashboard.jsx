@@ -3,7 +3,9 @@
 import Link from "next/link";
 import Image from "next/image";
 import clsx from "clsx";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+
+import { logOut } from "@/utils/authAction";
 
 import {
   SquareChartGantt,
@@ -23,6 +25,8 @@ import {
   SidebarFooter,
 } from "../ui/sidebar";
 
+import { Button } from "../ui/button";
+
 // menu items
 const linkItems = [
   { name: "Overview", href: "/dashboard", icon: SquareChartGantt },
@@ -37,6 +41,12 @@ const linkItems = [
 
 function SidebarDashboard() {
   const pathname = usePathname();
+  const router = useRouter();
+
+  function handleLogOut() {
+    logOut();
+    router.push('/')
+  }
 
   return (
     <Sidebar>
@@ -72,11 +82,11 @@ function SidebarDashboard() {
           })}
         </SidebarMenu>
       </SidebarContent>
-      <SidebarFooter className="hover:bg-primary1-200">
-        <Link href={"/logout"} className="flex gap-2 ">
+      <SidebarFooter>
+        <Button onClick={handleLogOut} className="flex gap-2 ">
           <LogOut />
           <span>Logout</span>
-        </Link>
+        </Button>
       </SidebarFooter>
     </Sidebar>
   );
