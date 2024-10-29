@@ -1,6 +1,5 @@
 // import Banner from "@/components/layout/Banner";
 
-import { nunito } from "../font";
 import "../globals.css";
 import Footer from "@/components/layout/Footer";
 // import Brand from "@/components/common/Brand";

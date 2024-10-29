@@ -2,10 +2,8 @@
 
 import Link from "next/link";
 import { useFormState } from "react-dom";
-
 import { UserForm } from "@/components/auth/UserForm";
 import { userAccountAction } from "@/utils/authAction";
-
 import CreateAccountButton from "@/components/ui/createAccountButton";
 import { Button } from "@/components/ui/button";
 import {
@@ -15,6 +13,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import {signIn} from "next-auth/react";
 
 function SignUpPage() {
   const initialState = { message: null, errors: {} };
@@ -36,7 +35,10 @@ function SignUpPage() {
           {/* Action Buttons */}
           <div className="mt-6 flex flex-col gap-4 md:flex-row md:gap-6">
             <CreateAccountButton />
-            <Button variant="outline" className="w-full md:w-auto">
+            <Button variant="outline"
+              className="w-full md:w-auto"
+              type="button"
+              onClick={() => signIn("google")}>
               Sign up with Google
             </Button>
           </div>

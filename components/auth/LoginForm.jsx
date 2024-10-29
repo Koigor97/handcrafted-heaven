@@ -1,5 +1,6 @@
-import Link from "next/link";
+"use client";
 
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -11,6 +12,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import LoginUsersButton from "../ui/loginUsersButton";
+import { signIn } from 'next-auth/react';
+
 
 export default function LoginForm({ errors }) {
   return (
@@ -48,8 +51,9 @@ export default function LoginForm({ errors }) {
               <p className="text-sm text-red-500">{errors.password}</p>
             )}
           </div>
+
           <LoginUsersButton />
-          <Button variant="outline" className="w-full">
+          <Button variant="outline" className="w-full" type="button" onClick={() => signIn("google")}>
             Login with Google
           </Button>
         </div>
