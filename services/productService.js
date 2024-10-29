@@ -90,18 +90,36 @@ export async function getLimitedProductsForTesting() {
 export async function getProductById(productId) {
   const query = `
     SELECT
-      p.product_id,
-      p.name,
-      p.description,
-      p.price,
-      p.quantity_in_stock,
-      p.image_url,
-      a.shop_name AS artisan_name,
-      c.name AS category_name
+    p.product_id,
+    p.name,
+    p.description,
+    p.price,
+    p.quantity_in_stock,
+    p.image_url,
+    a.shop_name AS artisan_name,
+    c.name AS category_name,
+    -- Agrupa todas las reseñas en un array de JSON
+    COALESCE(
+        JSON_AGG(
+            JSON_BUILD_OBJECT(
+                'user_id', r.user_id,
+                'rating', r.rating,
+                'review_text', r.review_text,
+                'user_name', u.name,
+                'user_image_url', u.user_image_url
+            )
+        ) FILTER (WHERE r.review_id IS NOT NULL),
+        '[]'
+    ) AS reviews
     FROM public.products p
     JOIN public.artisans a ON p.artisan_id = a.artisan_id
     JOIN public.categories c ON p.category_id = c.category_id
+    LEFT JOIN public.reviews r ON p.product_id = r.product_id
+    LEFT JOIN public.users u ON r.user_id = u.user_id
     WHERE p.product_id = $1
+    GROUP BY
+        p.product_id, p.name, p.description, p.price,
+        p.quantity_in_stock, p.image_url, a.shop_name, c.name;
   `;
   try {
     const result = await db.query(query, [productId]);

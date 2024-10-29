@@ -64,8 +64,16 @@ function AvatarMenu() {
                     </DropdownMenuTrigger>
                     <DropdownMenuContent className="w-80 bg-primary border-none">
                         <DropdownMenuLabel className="text-text-950">My Account</DropdownMenuLabel>
-                        <DropdownMenuItem className="text-text-800"><Link href="/profile" className="flex flex-row gap-2"><User className="stroke-1"/> My Profile</Link></DropdownMenuItem>
-                        <DropdownMenuItem className="text-text-800"><Link href="/orders" className="flex flex-row gap-2"><Package className="stroke-1"/> My Orders</Link></DropdownMenuItem>
+                        <DropdownMenuItem className="text-text-800">
+                            <Link href={user.role === 'customer' ? '/': 'dashboard'} className="flex flex-row gap-2">
+                            <User className="stroke-1"/> {
+                                user.role === 'customer' ? 'My Profile': 'Dashboard'
+                                }
+                            </Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem className="text-text-800"><Link href={user.role === 'customer' ? '/cart': '/dashboard/products'} className="flex flex-row gap-2"><Package className="stroke-1"/>{
+                            user.role === 'customer' ? 'My Orders': 'Products Dashboard'
+                        }</Link></DropdownMenuItem>
                         <DropdownMenuSeparator className="bg-background1-300"/>
                         <DropdownMenuItem className="text-text-800 gap-2 cursor-pointer" onClick={handleLogOut}>
                                 <LogOut className="stroke-1"/> Log Out
