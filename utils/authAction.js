@@ -1,20 +1,20 @@
-'use server';
+"use server";
 
-import { redirect } from 'next/navigation';
-import { cookies } from 'next/headers';
+import { redirect } from "next/navigation";
+import { cookies } from "next/headers";
 
-import { convertImage, uploadImageToCloudinary } from './cloudinaryHelper';
-import { createToken } from '@/lib/auth';
+import { convertImage, uploadImageToCloudinary } from "./cloudinaryHelper";
+import { createToken } from "@/lib/auth";
 import {
   createUserAccount,
-  createArtisanAccount
-} from '@/services/createAccountService';
-import { UserFormSchema } from '@/services/schemas/UserFormSchema';
-import { ArtisanFormSchema } from '@/services/schemas/ArtisanFormSchema';
-import { LoginFormSchema } from '@/services/schemas/LoginFormSchema';
-import { getUserByEmail, getUserLoginById } from '@/services/userService';
-import bcrypt from 'bcryptjs';
-import { verifyToken } from '@/lib/auth';
+  createArtisanAccount,
+} from "@/services/createAccountService";
+import { UserFormSchema } from "@/services/schemas/UserFormSchema";
+import { ArtisanFormSchema } from "@/services/schemas/ArtisanFormSchema";
+import { LoginFormSchema } from "@/services/schemas/LoginFormSchema";
+import { getUserByEmail, getUserLoginById } from "@/services/userService";
+import bcrypt from "bcryptjs";
+import { verifyToken } from "@/lib/auth";
 
 /**************** ARTISAN ACCOUNT FORM ACTION  *****************/
 /**
@@ -26,15 +26,15 @@ import { verifyToken } from '@/lib/auth';
  * @returns {Promise<Object|Array<Object>>} - Returns the newly created user object or an array of error objects.
  */
 export async function artisanAccountAction(previousState, formData) {
-  const name = formData.get('name');
-  const email = formData.get('email');
-  const password = formData.get('password');
-  const phone = formData.get('phone');
-  const userImageUrl = formData.get('user_image_url');
-  const shop_name = formData.get('shop_name');
-  const shop_description = formData.get('shop_description');
-  const bio = formData.get('bio');
-  const shopLogoUrl = formData.get('shop_logo_url');
+  const name = formData.get("name");
+  const email = formData.get("email");
+  const password = formData.get("password");
+  const phone = formData.get("phone");
+  const userImageUrl = formData.get("user_image_url");
+  const shop_name = formData.get("shop_name");
+  const shop_description = formData.get("shop_description");
+  const bio = formData.get("bio");
+  const shopLogoUrl = formData.get("shop_logo_url");
 
   /**
    * validate name, email, password, shop_name, shop_description, shop_logo_url using useFormState
@@ -46,7 +46,7 @@ export async function artisanAccountAction(previousState, formData) {
     phone,
     shop_name,
     shop_description,
-    shop_logo_url: shopLogoUrl
+    shop_logo_url: shopLogoUrl,
   };
 
   const validationResult = ArtisanFormSchema.safeParse(isFormDataValid);
@@ -54,7 +54,7 @@ export async function artisanAccountAction(previousState, formData) {
   if (!validationResult.success) {
     return {
       errors: validationResult.error.flatten().fieldErrors,
-      mesagge: 'Failed to create user account'
+      mesagge: "Failed to create user account",
     };
   }
 
@@ -64,10 +64,10 @@ export async function artisanAccountAction(previousState, formData) {
     user_image_url = await uploadImageToCloudinary(
       convertImage,
       userImageUrl,
-      'users'
+      "users"
     );
   } catch (error) {
-    new Error(' Error uploading user image to Cloudinary: ' + error);
+    new Error(" Error uploading user image to Cloudinary: " + error);
   }
 
   let shop_logo_url;
@@ -76,19 +76,19 @@ export async function artisanAccountAction(previousState, formData) {
     shop_logo_url = await uploadImageToCloudinary(
       convertImage,
       shopLogoUrl,
-      'artisans-logo'
+      "artisans-logo"
     );
   } catch (error) {
-    new Error(' Error uploading shop logo image to Cloudinary: ' + error);
+    new Error(" Error uploading shop logo image to Cloudinary: " + error);
   }
 
   const userData = {
     name,
     email,
     password,
-    role: 'artisan',
+    role: "artisan",
     phone,
-    user_image_url
+    user_image_url,
   };
 
   const user = await createUserAccount(userData);
@@ -99,15 +99,15 @@ export async function artisanAccountAction(previousState, formData) {
     shop_name,
     shop_description,
     bio,
-    shop_logo_url
+    shop_logo_url,
   };
 
   const artisan = await createArtisanAccount(artisanData);
 
-  cookies().set('token', token, {
-    httpOnly: true
+  cookies().set("token", token, {
+    httpOnly: true,
   });
-  redirect('/dashboard');
+  redirect("/dashboard");
 }
 
 /***************** USER ACCOUNT FORM ACTION  **************************
@@ -120,11 +120,11 @@ export async function artisanAccountAction(previousState, formData) {
  * @returns {Promise<Object|Array<Object>>} - Returns the newly created user object or an array of error objects.
  */
 export async function userAccountAction(previousState, formData) {
-  const name = formData.get('name');
-  const email = formData.get('email');
-  const password = formData.get('password');
-  const phone = formData.get('phone');
-  const userImageUrl = formData.get('user_image_url');
+  const name = formData.get("name");
+  const email = formData.get("email");
+  const password = formData.get("password");
+  const phone = formData.get("phone");
+  const userImageUrl = formData.get("user_image_url");
 
   /**
    * validate name, email, password, shop_name, shop_description, shop_logo_url using useFormState
@@ -133,14 +133,14 @@ export async function userAccountAction(previousState, formData) {
     name,
     email,
     password,
-    phone
+    phone,
   };
 
   const validationResult = UserFormSchema.safeParse(isFormDataValid);
   if (!validationResult.success) {
     return {
       errors: validationResult.error.flatten().fieldErrors,
-      mesagge: 'Failed to create user account'
+      mesagge: "Failed to create user account",
     };
   }
 
@@ -150,10 +150,10 @@ export async function userAccountAction(previousState, formData) {
     user_image_url = await uploadImageToCloudinary(
       convertImage,
       userImageUrl,
-      'users'
+      "users"
     );
   } catch (error) {
-    new Error(' Error uploading user image to Cloudinary: ' + error);
+    new Error(" Error uploading user image to Cloudinary: " + error);
   }
 
   const userData = {
@@ -161,17 +161,17 @@ export async function userAccountAction(previousState, formData) {
     email,
     password,
     phone,
-    user_image_url
+    user_image_url,
   };
 
   const user = await createUserAccount(userData);
   const token = await createToken(user);
 
-  cookies().set('token', token, {
-    httpOnly: true
+  cookies().set("token", token, {
+    httpOnly: true,
   });
 
-  redirect('/');
+  redirect("/");
 }
 
 /***************** LOGIN FORM ACTION  **************************
@@ -184,15 +184,15 @@ export async function userAccountAction(previousState, formData) {
  * @returns {VoidFunction} - Returns the newly created user object or an array of error objects.
  */
 export async function loginAction(previousState, formData) {
-  const email = formData.get('email');
-  const password = formData.get('password');
+  const email = formData.get("email");
+  const password = formData.get("password");
 
   /**
    * validate email, password using useFormState
    */
   const isFormDataValid = {
     email,
-    password
+    password,
   };
 
   const validationResult = LoginFormSchema.safeParse(isFormDataValid);
@@ -200,7 +200,7 @@ export async function loginAction(previousState, formData) {
   if (!validationResult.success) {
     return {
       errors: validationResult.error.flatten().fieldErrors,
-      mesagge: 'Failed to login'
+      mesagge: "Failed to login",
     };
   }
 
@@ -208,8 +208,8 @@ export async function loginAction(previousState, formData) {
 
   if (!user) {
     return {
-      errors: { email: ['User not found, check your email'] },
-      message: 'User not found, try again'
+      errors: { email: ["User not found, check your email"] },
+      message: "User not found, try again",
     };
   }
 
@@ -217,20 +217,20 @@ export async function loginAction(previousState, formData) {
   delete user.password;
   if (!isPasswordValid) {
     return {
-      errors: { password: ['Incorrect password, try again'] },
-      message: 'Incorrect password, try again'
+      errors: { password: ["Incorrect password, try again"] },
+      message: "Incorrect password, try again",
     };
   }
   const token = await createToken(user);
 
-  cookies().set('token', token, {
-    httpOnly: true
+  cookies().set("token", token, {
+    httpOnly: true,
   });
 
-  if (user.role === 'artisan') {
-    redirect('/dashboard');
+  if (user.role === "artisan") {
+    redirect("/dashboard");
   }
-  redirect('/');
+  redirect("/");
 }
 
 /***************** IS USER LOGGED IN ACTIONS *****************/
@@ -239,8 +239,9 @@ export async function loginAction(previousState, formData) {
  *
  * @returns {Object} - Returns the user that has the token on the cookie
  */
+
 export async function isUserLoggedIn() {
-  const token = cookies().get('token')?.value;
+  const token = cookies().get("token")?.value;
 
   const verifiedToken = token && (await verifyToken(token));
   if (!verifiedToken) {
@@ -258,5 +259,6 @@ export async function isUserLoggedIn() {
  */
 export async function logOut() {
   // Delete the token cookie
-  cookies().delete('token');
+  cookies().delete("token");
+  // redirect("/");
 }
