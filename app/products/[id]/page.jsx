@@ -2,6 +2,7 @@
 import StarRating from '@/components/common/Ratings';
 import { getProductById } from '@/services/productService';
 import Image from 'next/image';
+import ReviewForm from '@/components/common/ReviewForm';
 
 export default async function ProductDetails({ params }) {
   const { id } = params; // Accessing the dynamic route parameter 'id'
@@ -39,7 +40,10 @@ export default async function ProductDetails({ params }) {
         <div className="flex flex-col justify-between">
           <div>
             <h1 className="text-5xl font-extrabold mb-4">{product.name}</h1>
-            <StarRating />
+            <div className="mt-12">
+              <h2 className="text-2xl font-bold mb-4">Customer Reviews</h2>
+              <ReviewForm />
+            </div>
             <p className="text-3xl text-green-600 mb-4">${Number(product.price || 0).toFixed(2)}</p>
             <p className="text-lg text-gray-600 mb-6">{product.description}</p>
             
