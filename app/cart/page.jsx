@@ -5,10 +5,12 @@
 import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { getLocalStorage, deleteItemFromLocalStorage, formatPrice } from '@/utils/helper';
+import { useRouter } from 'next/navigation';
 
 export default function CartPage() {
     const [cartItems, setCartItems] = useState(getLocalStorage('cart') || []);
     const [isMounted, setIsMounted] = useState(false);
+    const router = useRouter();
 
     useEffect(() => {
         setIsMounted(true);
@@ -41,6 +43,8 @@ export default function CartPage() {
 
     const handleCheckout = () => {
         console.log('Proceeding to checkout...');
+        //Redirect to the checkout page
+        router.push('/checkout');
     };
 
     if (!isMounted) {
