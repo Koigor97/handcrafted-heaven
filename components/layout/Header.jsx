@@ -118,10 +118,7 @@ function Header() {
                 <DropdownMenuLabel>Choose account Login</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem asChild>
-                  <Link href="/auth/login">User Login</Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link href="/auth/login">Artisan Login</Link>
+                  <Link href="/auth/login">Login</Link>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -172,8 +169,7 @@ function Header() {
                 <DropdownMenuContent className="w-45">
                   <DropdownMenuLabel>Choose account Login</DropdownMenuLabel>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem asChild><Link href="/auth/login">User Login</Link></DropdownMenuItem>
-                  <DropdownMenuItem asChild><Link href="/auth/login">Artisan Login</Link></DropdownMenuItem>
+                  <DropdownMenuItem asChild><Link href="/auth/login">Login</Link></DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>
